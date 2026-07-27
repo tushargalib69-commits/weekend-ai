@@ -1,0 +1,899 @@
+{
+  "users": [
+    {
+      "user_id": "user_1785137294124",
+      "full_name": "mo",
+      "email": "mo@gmail.com",
+      "phone": "111",
+      "password": "ee79976c9380d5e337fc1c095ece8c8f22f91f306ceeb161fa51fecede2c4ba1",
+      "travel_style": "Adventure Traveler",
+      "created_at": "2026-07-27T07:28:14.125Z"
+    }
+  ],
+  "travel_plans": [
+    {
+      "origin": "Dhaka",
+      "destination": "rajshahi",
+      "budget": 10000,
+      "days": 3,
+      "style": "Budget",
+      "plan_json": {
+        "origin": "Dhaka",
+        "destination": "rajshahi",
+        "budget": 10000,
+        "days": 3,
+        "style": "Budget",
+        "plan": {
+          "tripTitle": "Dhaka → rajshahi Travel Plan",
+          "overview": {
+            "origin": "Dhaka",
+            "destination": "rajshahi",
+            "budget": 10000,
+            "days": 3,
+            "style": "Budget"
+          },
+          "journey": [
+            {
+              "from": "Dhaka",
+              "to": "rajshahi",
+              "mode": "Road",
+              "transport": "Train",
+              "provider": "Bangladesh Railway",
+              "departureTime": "10:30 PM",
+              "arrivalTime": "05:30 AM",
+              "duration": "7 hours",
+              "cost": 800,
+              "details": "Comfortable train ride to rajshahi"
+            },
+            {
+              "from": "rajshahi",
+              "to": "Dhaka",
+              "mode": "Road",
+              "transport": "Return Bus",
+              "provider": "Bangladesh Railway",
+              "departureTime": "08:00 PM",
+              "arrivalTime": "03:00 AM",
+              "duration": "7 hours",
+              "cost": 800,
+              "details": "Return journey back to Dhaka"
+            }
+          ],
+          "accommodation": [
+            {
+              "hotelName": "Hotel Star International",
+              "location": "Shaheb Bazar",
+              "roomType": "Deluxe AC",
+              "nights": 2,
+              "costPerNight": 1500,
+              "totalCost": 3000
+            }
+          ],
+          "foodPlan": [
+            {
+              "meal": "Breakfast",
+              "restaurant": "rajshahi Breakfast Cafe",
+              "foodItems": "Paratha, Egg, Tea",
+              "cost": 133
+            },
+            {
+              "meal": "Lunch",
+              "restaurant": "rajshahi Local Restaurant",
+              "foodItems": "Rice, local curry, drink",
+              "cost": 133
+            },
+            {
+              "meal": "Dinner",
+              "restaurant": "rajshahi Evening Kitchen",
+              "foodItems": "Local dinner, salad, tea",
+              "cost": 133
+            }
+          ],
+          "activities": [
+            {
+              "place": "Padma River Bank",
+              "transport": "CNG + Walk",
+              "details": "Riverbank sunset and heritage walk",
+              "entryFee": 0,
+              "localTransportCost": 400
+            }
+          ],
+          "dailyCosts": [
+            {
+              "day": "Day 1",
+              "transport": 800,
+              "hotel": 1500,
+              "food": 400,
+              "activities": 300,
+              "other": 250,
+              "total": 3250
+            },
+            {
+              "day": "Day 2",
+              "transport": 0,
+              "hotel": 1500,
+              "food": 400,
+              "activities": 300,
+              "other": 167,
+              "total": 2367
+            },
+            {
+              "day": "Day 3",
+              "transport": 0,
+              "hotel": 0,
+              "food": 400,
+              "activities": 300,
+              "other": 125,
+              "total": 825
+            }
+          ],
+          "summary": {
+            "transport": 1600,
+            "hotels": 3000,
+            "food": 1200,
+            "activities": 600,
+            "extra": 500,
+            "grandTotal": 6900
+          }
+        }
+      },
+      "created_at": "2026-07-27T04:38:26.716Z"
+    },
+    {
+      "origin": "Dhaka",
+      "destination": "sylhet",
+      "budget": 10000,
+      "days": 3,
+      "style": "Budget",
+      "plan_json": {
+        "origin": "Dhaka",
+        "destination": "sylhet",
+        "budget": 10000,
+        "days": 3,
+        "style": "Budget",
+        "plan": {
+          "tripTitle": "Dhaka → sylhet Travel Plan",
+          "overview": {
+            "origin": "Dhaka",
+            "destination": "sylhet",
+            "budget": 10000,
+            "days": 3,
+            "style": "Budget"
+          },
+          "journey": [
+            {
+              "from": "Dhaka",
+              "to": "sylhet",
+              "mode": "Road",
+              "transport": "AC Bus",
+              "provider": "Shyamoli Paribahan",
+              "departureTime": "10:30 PM",
+              "arrivalTime": "05:30 AM",
+              "duration": "7 hours",
+              "cost": 1350,
+              "details": "Comfortable ac bus ride to sylhet"
+            },
+            {
+              "from": "sylhet",
+              "to": "Dhaka",
+              "mode": "Road",
+              "transport": "Return Bus",
+              "provider": "Shyamoli Paribahan",
+              "departureTime": "08:00 PM",
+              "arrivalTime": "03:00 AM",
+              "duration": "7 hours",
+              "cost": 1350,
+              "details": "Return journey back to Dhaka"
+            }
+          ],
+          "accommodation": [
+            {
+              "hotelName": "Hotel Noorjahan Grand",
+              "location": "Zindabazar",
+              "roomType": "Deluxe AC",
+              "nights": 2,
+              "costPerNight": 1800,
+              "totalCost": 3600
+            }
+          ],
+          "foodPlan": [
+            {
+              "meal": "Breakfast",
+              "restaurant": "sylhet Breakfast Cafe",
+              "foodItems": "Paratha, Egg, Tea",
+              "cost": 167
+            },
+            {
+              "meal": "Lunch",
+              "restaurant": "sylhet Local Restaurant",
+              "foodItems": "Rice, local curry, drink",
+              "cost": 167
+            },
+            {
+              "meal": "Dinner",
+              "restaurant": "sylhet Evening Kitchen",
+              "foodItems": "Local dinner, salad, tea",
+              "cost": 167
+            }
+          ],
+          "activities": [
+            {
+              "place": "Ratargul Swamp Forest",
+              "transport": "CNG + Walk",
+              "details": "Boat ride and nature tour",
+              "entryFee": 200,
+              "localTransportCost": 400
+            }
+          ],
+          "dailyCosts": [
+            {
+              "day": "Day 1",
+              "transport": 1350,
+              "hotel": 1800,
+              "food": 500,
+              "activities": 300,
+              "other": 250,
+              "total": 4200
+            },
+            {
+              "day": "Day 2",
+              "transport": 0,
+              "hotel": 1800,
+              "food": 500,
+              "activities": 300,
+              "other": 167,
+              "total": 2767
+            },
+            {
+              "day": "Day 3",
+              "transport": 0,
+              "hotel": 0,
+              "food": 500,
+              "activities": 300,
+              "other": 125,
+              "total": 925
+            }
+          ],
+          "summary": {
+            "transport": 2700,
+            "hotels": 3600,
+            "food": 1500,
+            "activities": 600,
+            "extra": 500,
+            "grandTotal": 8900
+          }
+        }
+      },
+      "created_at": "2026-07-27T07:20:17.894Z"
+    },
+    {
+      "origin": "Dhaka",
+      "destination": "Sundarbans",
+      "budget": 99999,
+      "days": 3,
+      "style": "Budget",
+      "plan_json": {
+        "origin": "Dhaka",
+        "destination": "Sundarbans",
+        "budget": 99999,
+        "days": 3,
+        "style": "Budget",
+        "plan": {
+          "tripTitle": "Dhaka → Sundarbans Travel Plan",
+          "overview": {
+            "origin": "Dhaka",
+            "destination": "Sundarbans",
+            "budget": 99999,
+            "days": 3,
+            "style": "Budget"
+          },
+          "journey": [
+            {
+              "from": "Dhaka",
+              "to": "Sundarbans",
+              "mode": "Road",
+              "transport": "Bus + Launch",
+              "provider": "Khulna launch service",
+              "departureTime": "10:30 PM",
+              "arrivalTime": "05:30 AM",
+              "duration": "7 hours",
+              "cost": 1700,
+              "details": "Comfortable bus + launch ride to Sundarbans"
+            },
+            {
+              "from": "Sundarbans",
+              "to": "Dhaka",
+              "mode": "Road",
+              "transport": "Return Bus",
+              "provider": "Khulna launch service",
+              "departureTime": "08:00 PM",
+              "arrivalTime": "03:00 AM",
+              "duration": "7 hours",
+              "cost": 1700,
+              "details": "Return journey back to Dhaka"
+            }
+          ],
+          "accommodation": [
+            {
+              "hotelName": "Mongla River View",
+              "location": "Mongla",
+              "roomType": "Deluxe AC",
+              "nights": 2,
+              "costPerNight": 1700,
+              "totalCost": 3400
+            }
+          ],
+          "foodPlan": [
+            {
+              "meal": "Breakfast",
+              "restaurant": "Sundarbans Breakfast Cafe",
+              "foodItems": "Paratha, Egg, Tea",
+              "cost": 167
+            },
+            {
+              "meal": "Lunch",
+              "restaurant": "Sundarbans Local Restaurant",
+              "foodItems": "Rice, local curry, drink",
+              "cost": 167
+            },
+            {
+              "meal": "Dinner",
+              "restaurant": "Sundarbans Evening Kitchen",
+              "foodItems": "Local dinner, salad, tea",
+              "cost": 167
+            }
+          ],
+          "activities": [
+            {
+              "place": "Sundarbans Mangrove Forest",
+              "transport": "CNG + Walk",
+              "details": "Launch safari and wildlife watching",
+              "entryFee": 300,
+              "localTransportCost": 400
+            }
+          ],
+          "dailyCosts": [
+            {
+              "day": "Day 1",
+              "transport": 1700,
+              "hotel": 1700,
+              "food": 500,
+              "activities": 300,
+              "other": 2500,
+              "total": 6700
+            },
+            {
+              "day": "Day 2",
+              "transport": 0,
+              "hotel": 1700,
+              "food": 500,
+              "activities": 300,
+              "other": 1667,
+              "total": 4167
+            },
+            {
+              "day": "Day 3",
+              "transport": 0,
+              "hotel": 0,
+              "food": 500,
+              "activities": 300,
+              "other": 1250,
+              "total": 2050
+            }
+          ],
+          "summary": {
+            "transport": 3400,
+            "hotels": 3400,
+            "food": 1500,
+            "activities": 600,
+            "extra": 5000,
+            "grandTotal": 13900
+          }
+        }
+      },
+      "created_at": "2026-07-27T07:30:29.156Z"
+    },
+    {
+      "origin": "Dhaka",
+      "destination": "cox bazar",
+      "budget": 99999,
+      "days": 3,
+      "style": "Budget",
+      "plan_json": {
+        "origin": "Dhaka",
+        "destination": "cox bazar",
+        "budget": 99999,
+        "days": 3,
+        "style": "Budget",
+        "plan": {
+          "tripTitle": "Dhaka → cox bazar Travel Plan",
+          "overview": {
+            "origin": "Dhaka",
+            "destination": "cox bazar",
+            "budget": 99999,
+            "days": 3,
+            "style": "Budget"
+          },
+          "journey": [
+            {
+              "from": "Dhaka",
+              "to": "cox bazar",
+              "mode": "Road",
+              "transport": "AC Bus",
+              "provider": "Green Line Paribahan",
+              "departureTime": "10:30 PM",
+              "arrivalTime": "05:30 AM",
+              "duration": "7 hours",
+              "cost": 1400,
+              "details": "Comfortable ac bus ride to cox bazar"
+            },
+            {
+              "from": "cox bazar",
+              "to": "Dhaka",
+              "mode": "Road",
+              "transport": "Return Bus",
+              "provider": "Green Line Paribahan",
+              "departureTime": "08:00 PM",
+              "arrivalTime": "03:00 AM",
+              "duration": "7 hours",
+              "cost": 1400,
+              "details": "Return journey back to Dhaka"
+            }
+          ],
+          "accommodation": [
+            {
+              "hotelName": "Hotel Sea Pearl",
+              "location": "Laboni Beach",
+              "roomType": "Deluxe AC",
+              "nights": 2,
+              "costPerNight": 2000,
+              "totalCost": 4000
+            }
+          ],
+          "foodPlan": [
+            {
+              "meal": "Breakfast",
+              "restaurant": "cox bazar Breakfast Cafe",
+              "foodItems": "Paratha, Egg, Tea",
+              "cost": 167
+            },
+            {
+              "meal": "Lunch",
+              "restaurant": "cox bazar Local Restaurant",
+              "foodItems": "Rice, local curry, drink",
+              "cost": 167
+            },
+            {
+              "meal": "Dinner",
+              "restaurant": "cox bazar Evening Kitchen",
+              "foodItems": "Local dinner, salad, tea",
+              "cost": 167
+            }
+          ],
+          "activities": [
+            {
+              "place": "Laboni Beach",
+              "transport": "CNG + Walk",
+              "details": "Beach walk and sunset view",
+              "entryFee": 0,
+              "localTransportCost": 400
+            }
+          ],
+          "dailyCosts": [
+            {
+              "day": "Day 1",
+              "transport": 1400,
+              "hotel": 2000,
+              "food": 500,
+              "activities": 300,
+              "other": 2500,
+              "total": 6700
+            },
+            {
+              "day": "Day 2",
+              "transport": 0,
+              "hotel": 2000,
+              "food": 500,
+              "activities": 300,
+              "other": 1667,
+              "total": 4467
+            },
+            {
+              "day": "Day 3",
+              "transport": 0,
+              "hotel": 0,
+              "food": 500,
+              "activities": 300,
+              "other": 1250,
+              "total": 2050
+            }
+          ],
+          "summary": {
+            "transport": 2800,
+            "hotels": 4000,
+            "food": 1500,
+            "activities": 600,
+            "extra": 5000,
+            "grandTotal": 13900
+          }
+        }
+      },
+      "created_at": "2026-07-27T07:30:44.559Z"
+    },
+    {
+      "origin": "Dhaka",
+      "destination": "cox bazar",
+      "budget": 99999,
+      "days": 3,
+      "style": "Budget",
+      "plan_json": {
+        "origin": "Dhaka",
+        "destination": "cox bazar",
+        "budget": 99999,
+        "days": 3,
+        "style": "Budget",
+        "plan": {
+          "tripTitle": "Dhaka → cox bazar Travel Plan",
+          "overview": {
+            "origin": "Dhaka",
+            "destination": "cox bazar",
+            "budget": 99999,
+            "days": 3,
+            "style": "Budget"
+          },
+          "journey": [
+            {
+              "from": "Dhaka",
+              "to": "cox bazar",
+              "mode": "Road",
+              "transport": "AC Bus",
+              "provider": "Green Line Paribahan",
+              "departureTime": "10:30 PM",
+              "arrivalTime": "05:30 AM",
+              "duration": "7 hours",
+              "cost": 1400,
+              "details": "Comfortable ac bus ride to cox bazar"
+            },
+            {
+              "from": "cox bazar",
+              "to": "Dhaka",
+              "mode": "Road",
+              "transport": "Return Bus",
+              "provider": "Green Line Paribahan",
+              "departureTime": "08:00 PM",
+              "arrivalTime": "03:00 AM",
+              "duration": "7 hours",
+              "cost": 1400,
+              "details": "Return journey back to Dhaka"
+            }
+          ],
+          "accommodation": [
+            {
+              "hotelName": "Hotel Sea Pearl",
+              "location": "Laboni Beach",
+              "roomType": "Deluxe AC",
+              "nights": 2,
+              "costPerNight": 2000,
+              "totalCost": 4000
+            }
+          ],
+          "foodPlan": [
+            {
+              "meal": "Breakfast",
+              "restaurant": "cox bazar Breakfast Cafe",
+              "foodItems": "Paratha, Egg, Tea",
+              "cost": 167
+            },
+            {
+              "meal": "Lunch",
+              "restaurant": "cox bazar Local Restaurant",
+              "foodItems": "Rice, local curry, drink",
+              "cost": 167
+            },
+            {
+              "meal": "Dinner",
+              "restaurant": "cox bazar Evening Kitchen",
+              "foodItems": "Local dinner, salad, tea",
+              "cost": 167
+            }
+          ],
+          "activities": [
+            {
+              "place": "Laboni Beach",
+              "transport": "CNG + Walk",
+              "details": "Beach walk and sunset view",
+              "entryFee": 0,
+              "localTransportCost": 400
+            }
+          ],
+          "dailyCosts": [
+            {
+              "day": "Day 1",
+              "transport": 1400,
+              "hotel": 2000,
+              "food": 500,
+              "activities": 300,
+              "other": 2500,
+              "total": 6700
+            },
+            {
+              "day": "Day 2",
+              "transport": 0,
+              "hotel": 2000,
+              "food": 500,
+              "activities": 300,
+              "other": 1667,
+              "total": 4467
+            },
+            {
+              "day": "Day 3",
+              "transport": 0,
+              "hotel": 0,
+              "food": 500,
+              "activities": 300,
+              "other": 1250,
+              "total": 2050
+            }
+          ],
+          "summary": {
+            "transport": 2800,
+            "hotels": 4000,
+            "food": 1500,
+            "activities": 600,
+            "extra": 5000,
+            "grandTotal": 13900
+          }
+        }
+      },
+      "created_at": "2026-07-27T07:30:59.282Z"
+    },
+    {
+      "origin": "Dhaka",
+      "destination": "cox bazar",
+      "budget": 10000,
+      "days": 2,
+      "style": "Budget",
+      "plan_json": {
+        "origin": "Dhaka",
+        "destination": "cox bazar",
+        "budget": 10000,
+        "days": 2,
+        "style": "Budget",
+        "plan": {
+          "tripTitle": "Dhaka → cox bazar Travel Plan",
+          "overview": {
+            "origin": "Dhaka",
+            "destination": "cox bazar",
+            "budget": 10000,
+            "days": 2,
+            "style": "Budget"
+          },
+          "journey": [
+            {
+              "from": "Dhaka",
+              "to": "cox bazar",
+              "mode": "Road",
+              "transport": "AC Bus",
+              "provider": "Green Line Paribahan",
+              "departureTime": "10:30 PM",
+              "arrivalTime": "05:30 AM",
+              "duration": "7 hours",
+              "cost": 1400,
+              "details": "Comfortable ac bus ride to cox bazar"
+            },
+            {
+              "from": "cox bazar",
+              "to": "Dhaka",
+              "mode": "Road",
+              "transport": "Return Bus",
+              "provider": "Green Line Paribahan",
+              "departureTime": "08:00 PM",
+              "arrivalTime": "03:00 AM",
+              "duration": "7 hours",
+              "cost": 1400,
+              "details": "Return journey back to Dhaka"
+            }
+          ],
+          "accommodation": [
+            {
+              "hotelName": "Hotel Sea Pearl",
+              "location": "Laboni Beach",
+              "roomType": "Deluxe AC",
+              "nights": 1,
+              "costPerNight": 2000,
+              "totalCost": 2000
+            }
+          ],
+          "foodPlan": [
+            {
+              "meal": "Breakfast",
+              "restaurant": "cox bazar Breakfast Cafe",
+              "foodItems": "Paratha, Egg, Tea",
+              "cost": 167
+            },
+            {
+              "meal": "Lunch",
+              "restaurant": "cox bazar Local Restaurant",
+              "foodItems": "Rice, local curry, drink",
+              "cost": 167
+            },
+            {
+              "meal": "Dinner",
+              "restaurant": "cox bazar Evening Kitchen",
+              "foodItems": "Local dinner, salad, tea",
+              "cost": 167
+            }
+          ],
+          "activities": [
+            {
+              "place": "Laboni Beach",
+              "transport": "CNG + Walk",
+              "details": "Beach walk and sunset view",
+              "entryFee": 0,
+              "localTransportCost": 300
+            }
+          ],
+          "dailyCosts": [
+            {
+              "day": "Day 1",
+              "transport": 1400,
+              "hotel": 2000,
+              "food": 500,
+              "activities": 250,
+              "other": 250,
+              "total": 4400
+            },
+            {
+              "day": "Day 2",
+              "transport": 0,
+              "hotel": 0,
+              "food": 500,
+              "activities": 250,
+              "other": 167,
+              "total": 917
+            }
+          ],
+          "summary": {
+            "transport": 2800,
+            "hotels": 2000,
+            "food": 1000,
+            "activities": 500,
+            "extra": 500,
+            "grandTotal": 6800
+          }
+        }
+      },
+      "created_at": "2026-07-27T07:31:15.046Z"
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "booking_ref": "WKD-MS2WNUDF",
+      "user_id": "user_1785137294124",
+      "full_name": "mo",
+      "email": "mo@gmail.com",
+      "phone": "111",
+      "destination": "sylhet",
+      "origin": "Dhaka",
+      "trip_title": "Dhaka → sylhet Travel Plan",
+      "travelers": 1,
+      "budget": 10000,
+      "days": 3,
+      "style": "Budget",
+      "plan_json": {
+        "tripTitle": "Dhaka → sylhet Travel Plan",
+        "overview": {
+          "origin": "Dhaka",
+          "destination": "sylhet",
+          "budget": 10000,
+          "days": 3,
+          "style": "Budget"
+        },
+        "journey": [
+          {
+            "from": "Dhaka",
+            "to": "sylhet",
+            "mode": "Road",
+            "transport": "AC Bus",
+            "provider": "Shyamoli Paribahan",
+            "departureTime": "10:30 PM",
+            "arrivalTime": "05:30 AM",
+            "duration": "7 hours",
+            "cost": 1350,
+            "details": "Comfortable ac bus ride to sylhet"
+          },
+          {
+            "from": "sylhet",
+            "to": "Dhaka",
+            "mode": "Road",
+            "transport": "Return Bus",
+            "provider": "Shyamoli Paribahan",
+            "departureTime": "08:00 PM",
+            "arrivalTime": "03:00 AM",
+            "duration": "7 hours",
+            "cost": 1350,
+            "details": "Return journey back to Dhaka"
+          }
+        ],
+        "accommodation": [
+          {
+            "hotelName": "Hotel Noorjahan Grand",
+            "location": "Zindabazar",
+            "roomType": "Deluxe AC",
+            "nights": 2,
+            "costPerNight": 1800,
+            "totalCost": 3600
+          }
+        ],
+        "foodPlan": [
+          {
+            "meal": "Breakfast",
+            "restaurant": "sylhet Breakfast Cafe",
+            "foodItems": "Paratha, Egg, Tea",
+            "cost": 167
+          },
+          {
+            "meal": "Lunch",
+            "restaurant": "sylhet Local Restaurant",
+            "foodItems": "Rice, local curry, drink",
+            "cost": 167
+          },
+          {
+            "meal": "Dinner",
+            "restaurant": "sylhet Evening Kitchen",
+            "foodItems": "Local dinner, salad, tea",
+            "cost": 167
+          }
+        ],
+        "activities": [
+          {
+            "place": "Ratargul Swamp Forest",
+            "transport": "CNG + Walk",
+            "details": "Boat ride and nature tour",
+            "entryFee": 200,
+            "localTransportCost": 400
+          }
+        ],
+        "dailyCosts": [
+          {
+            "day": "Day 1",
+            "transport": 1350,
+            "hotel": 1800,
+            "food": 500,
+            "activities": 300,
+            "other": 250,
+            "total": 4200
+          },
+          {
+            "day": "Day 2",
+            "transport": 0,
+            "hotel": 1800,
+            "food": 500,
+            "activities": 300,
+            "other": 167,
+            "total": 2767
+          },
+          {
+            "day": "Day 3",
+            "transport": 0,
+            "hotel": 0,
+            "food": 500,
+            "activities": 300,
+            "other": 125,
+            "total": 925
+          }
+        ],
+        "summary": {
+          "transport": 2700,
+          "hotels": 3600,
+          "food": 1500,
+          "activities": 600,
+          "extra": 500,
+          "grandTotal": 8900
+        }
+      },
+      "status": "confirmed",
+      "created_at": "2026-07-27T07:28:28.035Z"
+    }
+  ]
+}

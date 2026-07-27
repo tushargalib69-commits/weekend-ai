@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekend AI | Dashboard</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css" />
+  <style>
+    :root { --primary:#0a2b67; --secondary:#0768ff; --accent:#05a6af; --light:#e8f5ff; --dark:#091f4e; --bg:#f5f9ff; --card:white; --text:#1b1b1b; --muted:#64748b; --border:#e1eaf4; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Inter',sans-serif; background:radial-gradient(circle at top right,#e5fbf6 0,transparent 30%),var(--bg); color:var(--text); }
+    nav { height:76px; background:rgba(255,255,255,.92); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 40px; position:sticky; top:0; z-index:1000; }
+    .logo { display:flex; align-items:center; text-decoration:none; }
+    .logo img { height:44px; width:auto; object-fit:contain; display:block; }
+    .container { max-width:1100px; margin:32px auto; padding:0 24px 40px; }
+    .hero { background:radial-gradient(circle at 86% 12%,rgba(5,166,175,.45),transparent 28%),linear-gradient(125deg,#081c46,#0a3779,#0768ff); color:white; padding:30px; border-radius:24px; display:flex; justify-content:space-between; align-items:center; gap:16px; box-shadow:0 24px 50px rgba(9,31,78,.18); }
+    .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:20px; }
+    .card { background:white; border:1px solid var(--border); border-radius:18px; padding:20px; box-shadow:0 10px 25px rgba(9,31,78,.05); transition:.25s; }
+    .card:hover { transform:translateY(-4px); box-shadow:0 14px 30px rgba(10,43,103,.12); border-color:rgba(7,104,255,.35); }
+    .card h3 { margin-bottom:8px; color:var(--dark); }
+    .card p { color:var(--muted); line-height:1.6; }
+    @media (max-width:800px){ .cards{grid-template-columns:1fr;} nav{padding:0 20px;} }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="logo" href="index.html"><img src="assets/weekend-ai-logo.png" alt="Weekend AI" /></a>
+    <a href="index.html" style="color:var(--primary); text-decoration:none; font-weight:600;">Back to Home</a>
+  </nav>
+
+  <div class="container">
+    <div class="hero">
+      <div>
+        <h1 id="welcomeTitle">Welcome, Traveler</h1>
+        <p>Your future dashboard for trips, bookings, saved plans, and profile settings is ready.</p>
+      </div>
+      <div style="font-size:48px;">🌍</div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>My Trips</h3>
+        <p>View all your planned journeys and saved itineraries here.</p>
+      </div>
+      <div class="card">
+        <h3>Saved Plans</h3>
+        <p>Keep your favorite AI-generated travel plans in one place.</p>
+      </div>
+      <div class="card">
+        <h3>Profile Settings</h3>
+        <p>Update your travel style, contact details, and preferences.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem('weekendai_user') || '{}');
+    const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+    if (!isLoggedIn || !user.email) {
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('welcomeTitle').textContent = `Welcome, ${user.full_name || user.email}`;
+    }
+  </script>
+</body>
+</html>

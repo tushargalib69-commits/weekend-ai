@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekend AI | Create Account</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css" />
+  <style>
+    :root {
+      --primary:#0a2b67;
+      --secondary:#0768ff;
+      --light:#e8f5ff;
+      --dark:#091f4e;
+      --bg:#f5f9ff;
+      --card:white;
+      --text:#1b1b1b;
+      --muted:#666;
+      --border:#ddd;
+      --danger:#e53935;
+      --warning:#f59e0b;
+      --success:#22c55e;
+    }
+
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Inter',sans-serif; background:radial-gradient(circle at top right,#e5fbf6 0,transparent 30%),var(--bg); color:var(--text); min-height:100vh; }
+
+    nav {
+      height:76px;
+      background:rgba(255,255,255,.92);
+      border-bottom:1px solid #e4ebf5;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 40px;
+      position:sticky;
+      top:0;
+      z-index:1000;
+    }
+
+    .logo { display:flex; align-items:center; text-decoration:none; }
+    .logo img { height:44px; width:auto; object-fit:contain; display:block; }
+    .nav-links { display:flex; gap:8px; }
+    .nav-btn { border:none; background:none; padding:10px 18px; cursor:pointer; font-weight:500; border-radius:10px; color:#555; text-decoration:none; }
+    .nav-btn:hover, .nav-btn.active { background:var(--light); color:var(--primary); }
+    .auth-buttons { display:flex; gap:10px; }
+    .auth-btn { padding:10px 18px; border-radius:10px; cursor:pointer; font-weight:600; text-decoration:none; }
+    .login-btn { background:white; color:var(--primary); border:1px solid var(--primary); }
+    .signup-btn { background:var(--primary); color:white; border:none; }
+
+    .page-wrap { display:flex; align-items:center; justify-content:center; padding:50px 24px; }
+    .auth-card { width:100%; max-width:560px; background:white; border:1px solid var(--border); border-radius:24px; padding:36px; box-shadow:0 24px 60px rgba(9,31,78,.12); }
+    .title { font-size:24px; font-weight:700; color:var(--dark); margin-bottom:6px; }
+    .subtitle { color:var(--muted); margin-bottom:20px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .input-group { margin-bottom:14px; }
+    .input-group.full { grid-column:1 / -1; }
+    .input-group label { display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:#334155; }
+    .input-wrap { position:relative; }
+    .input-wrap input, .input-wrap select {
+      width:100%;
+      padding:13px 44px 13px 14px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:15px;
+      outline:none;
+      background:white;
+    }
+    .input-wrap input:focus, .input-wrap select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(7,104,255,0.15); }
+    .toggle-password { position:absolute; right:10px; top:50%; transform:translateY(-50%); border:none; background:none; cursor:pointer; color:var(--muted); }
+    .strength { margin-top:8px; font-size:13px; color:var(--muted); }
+    .strength-bar { display:flex; gap:4px; margin-top:6px; }
+    .strength-bar span { flex:1; height:6px; border-radius:999px; background:#e5e7eb; }
+    .strength-bar span.active.weak { background:var(--danger); }
+    .strength-bar span.active.medium { background:var(--warning); }
+    .strength-bar span.active.strong { background:var(--success); }
+    .btn-primary { width:100%; border:none; background:linear-gradient(135deg,#0a2b67,#0768ff); color:white; padding:13px; border-radius:12px; cursor:pointer; font-weight:700; font-size:15px; box-shadow:0 10px 20px rgba(7,104,255,.2); }
+    .btn-primary:hover { background:var(--secondary); }
+    .switch-link { text-align:center; margin-top:16px; color:var(--muted); font-size:14px; }
+    .switch-link a { color:var(--primary); font-weight:600; text-decoration:none; }
+    .message { margin-top:12px; font-size:14px; color:var(--muted); }
+    .message.error { color:var(--danger); }
+    .message.success { color:var(--success); }
+
+    @media (max-width: 800px) {
+      nav { height:66px; padding:0 16px; }
+      .nav-links { display:none; }
+      .logo img { height:36px; width:auto; }
+      .grid { grid-template-columns:1fr; }
+      .auth-card { padding:28px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="logo" href="index.html"><img src="assets/weekend-ai-logo.png" alt="Weekend AI" /></a>
+    <div class="nav-links">
+      <a class="nav-btn" href="index.html">Home</a>
+      <a class="nav-btn" href="index.html#plan">AI Planner</a>
+      <a class="nav-btn" href="index.html#book">Booking</a>
+      <a class="nav-btn" href="index.html#chat">AI Chat</a>
+    </div>
+    <div class="auth-buttons">
+      <a href="login.html" class="auth-btn login-btn">Sign In</a>
+      <a href="signup.html" class="auth-btn signup-btn">Sign Up</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="auth-card">
+      <div class="title">Create Your Weekend AI Account</div>
+      <div class="subtitle">Join thousands of travelers planning smarter trips 🌍</div>
+
+      <form id="signup-form">
+        <div class="grid">
+          <div class="input-group">
+            <label for="fullName">Full Name</label>
+            <div class="input-wrap">
+              <input id="fullName" name="fullName" placeholder="Enter your name" required />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="phone">Phone Number</label>
+            <div class="input-wrap">
+              <input id="phone" name="phone" placeholder="Enter phone number" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group full">
+          <label for="email">Email Address</label>
+          <div class="input-wrap">
+            <input id="email" name="email" type="email" placeholder="Enter your email" required />
+          </div>
+        </div>
+
+        <div class="input-group full">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input id="password" name="password" type="password" placeholder="Create a password" required />
+            <button type="button" class="toggle-password" onclick="togglePassword('password')"><i class="ti ti-eye"></i></button>
+          </div>
+          <div class="strength">
+            <div>Password Strength:</div>
+            <div class="strength-bar" id="strengthBar">
+              <span></span><span></span><span></span>
+            </div>
+            <div id="strengthText">Weak</div>
+          </div>
+        </div>
+
+        <div class="input-group full">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-wrap">
+            <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Re-enter password" required />
+            <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')"><i class="ti ti-eye"></i></button>
+          </div>
+        </div>
+
+        <div class="input-group full">
+          <label for="travelStyle">Travel Preference</label>
+          <div class="input-wrap">
+            <select id="travelStyle" name="travelStyle">
+              <option>Budget Traveler</option>
+              <option>Adventure Traveler</option>
+              <option>Family Traveler</option>
+              <option>Luxury Traveler</option>
+              <option>Solo Traveler</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn-primary" type="submit">Create Account</button>
+        <div id="signup-message" class="message"></div>
+      </form>
+
+      <div class="switch-link">
+        Already have an account? <a href="login.html">Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function togglePassword(fieldId) {
+      const field = document.getElementById(fieldId);
+      const button = field.parentElement.querySelector('.toggle-password');
+      const icon = button.querySelector('i');
+      if (field.type === 'password') {
+        field.type = 'text';
+        icon.className = 'ti ti-eye-off';
+      } else {
+        field.type = 'password';
+        icon.className = 'ti ti-eye';
+      }
+    }
+
+    function checkPasswordStrength(password) {
+      let score = 0;
+      if (password.length >= 8) score += 1;
+      if (/[A-Z]/.test(password) && /[0-9]/.test(password)) score += 1;
+      if (/[^A-Za-z0-9]/.test(password)) score += 1;
+
+      const bars = document.querySelectorAll('#strengthBar span');
+      bars.forEach((bar, index) => {
+        bar.classList.remove('active', 'weak', 'medium', 'strong');
+        if (score > index) {
+          bar.classList.add('active');
+          if (score <= 1) bar.classList.add('weak');
+          else if (score === 2) bar.classList.add('medium');
+          else bar.classList.add('strong');
+        }
+      });
+
+      if (score <= 1) return { label: 'Weak', color: 'weak' };
+      if (score === 2) return { label: 'Medium', color: 'medium' };
+      return { label: 'Strong', color: 'strong' };
+    }
+
+    document.getElementById('password').addEventListener('input', function () {
+      const result = checkPasswordStrength(this.value);
+      document.getElementById('strengthText').textContent = result.label;
+    });
+
+    window.addEventListener('DOMContentLoaded', function () {
+      const signupForm = document.getElementById('signup-form');
+      const messageBox = document.getElementById('signup-message');
+
+      if (localStorage.getItem('loggedIn') === 'true') {
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      signupForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const fullName = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const travelStyle = document.getElementById('travelStyle').value;
+
+        if (!fullName || !email || !phone || !password || !confirmPassword) {
+          messageBox.className = 'message error';
+          messageBox.textContent = 'Please fill in all required fields.';
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          messageBox.className = 'message error';
+          messageBox.textContent = 'Passwords do not match.';
+          return;
+        }
+
+        try {
+          const response = await fetch('/api/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              full_name: fullName,
+              email,
+              phone,
+              password,
+              travel_style: travelStyle
+            })
+          });
+          const result = await response.json();
+
+          if (result.success) {
+            localStorage.setItem('loggedIn', 'true');
+            localStorage.setItem('userEmail', result.user.email);
+            localStorage.setItem('userName', result.user.full_name || result.user.email);
+            localStorage.setItem('weekendai_user', JSON.stringify(result.user));
+            window.location.href = 'index.html';
+            return;
+          }
+
+          messageBox.className = 'message error';
+          messageBox.textContent = result.message || 'Unable to create your account.';
+        } catch (error) {
+          messageBox.className = 'message error';
+          messageBox.textContent = 'Unable to connect to the server.';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

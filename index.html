@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Weekend AI | Smart Travel Companion</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css">
+
+
+<style>
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+
+:root{
+
+--primary:#0a2b67;
+--secondary:#0768ff;
+--accent:#05a6af;
+--light:#e8f5ff;
+--dark:#091f4e;
+
+--bg:#f5f9ff;
+--card:white;
+
+--text:#1b1b1b;
+--muted:#64748b;
+
+--border:#e1eaf4;
+
+}
+
+
+body{
+
+font-family:'Inter',sans-serif;
+background:radial-gradient(circle at top right,#e5fbf6 0,transparent 30%),var(--bg);
+color:var(--text);
+
+}
+
+
+nav{
+
+height:70px;
+background:white;
+border-bottom:1px solid var(--border);
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding:0 40px;
+
+position:sticky;
+top:0;
+z-index:1000;
+
+}
+
+
+
+.logo{
+
+display:flex;
+align-items:center;
+gap:12px;
+
+text-decoration:none;
+
+}
+
+
+
+.logo img{
+
+height:44px;
+width:auto;
+display:block;
+
+}
+
+
+
+.nav-links{
+
+display:flex;
+gap:8px;
+
+}
+
+
+
+.nav-btn{
+
+border:none;
+background:none;
+
+padding:10px 18px;
+
+cursor:pointer;
+
+font-weight:500;
+
+border-radius:10px;
+
+color:#555;
+
+}
+
+
+.nav-btn:hover,
+.nav-btn.active{
+
+background:var(--light);
+color:var(--primary);
+
+}
+
+
+
+.auth-buttons{
+
+display:flex;
+gap:10px;
+
+}
+
+
+
+.auth-btn{
+
+padding:10px 18px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-weight:600;
+
+}
+
+
+
+.login-btn{
+
+background:white;
+color:var(--primary);
+
+border:1px solid var(--primary);
+
+}
+
+
+.signup-btn{
+
+background:var(--primary);
+color:white;
+
+border:none;
+
+}
+
+
+
+.page{
+
+display:none;
+
+max-width:1100px;
+
+margin:auto;
+
+padding:40px 25px;
+
+}
+
+
+.page.active{
+
+display:block;
+
+}
+
+
+
+
+/* HERO */
+
+
+.hero{
+
+
+background:
+radial-gradient(circle at 86% 12%,rgba(5,166,175,.45),transparent 28%),
+linear-gradient(
+135deg,
+#081c46,
+#0a3779,
+#0768ff
+);
+
+
+color:white;
+
+padding:60px 50px;
+
+border-radius:25px;
+
+margin-bottom:40px;
+
+position:relative;
+
+overflow:hidden;
+
+box-shadow:0 24px 50px rgba(9,31,78,.18);
+
+}
+
+
+
+.hero h1{
+
+font-size:38px;
+
+margin-bottom:15px;
+
+}
+
+
+
+.hero p{
+
+max-width:600px;
+
+line-height:1.7;
+
+opacity:.9;
+
+margin-bottom:30px;
+
+}
+
+
+
+.search-box{
+
+display:flex;
+
+background:white;
+
+padding:10px;
+
+border-radius:15px;
+
+max-width:650px;
+
+box-shadow:0 15px 35px rgba(9,31,78,.25);
+
+}
+
+
+
+.search-box input{
+
+flex:1;
+
+border:none;
+
+outline:none;
+
+padding:12px;
+
+font-size:15px;
+
+}
+
+
+
+.search-box button{
+
+background:linear-gradient(135deg,var(--primary),var(--secondary));
+
+color:white;
+
+border:none;
+
+padding:12px 25px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-weight:600;
+
+transition:.25s;
+
+}
+
+.search-box button:hover{
+
+opacity:.92;
+transform:translateY(-1px);
+
+}
+
+
+
+
+.section-title{
+
+font-size:20px;
+
+font-weight:700;
+
+margin-bottom:20px;
+
+}
+
+
+
+.destinations{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:20px;
+
+}
+
+
+
+.destination-card{
+
+
+background:white;
+
+border-radius:18px;
+
+overflow:hidden;
+
+cursor:pointer;
+
+border:1px solid var(--border);
+
+transition:.3s;
+
+}
+
+
+
+.destination-card:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 14px 30px rgba(10,43,103,.12);
+border-color:rgba(7,104,255,.35);
+
+}
+
+
+
+.destination-img{
+
+height:130px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:55px;
+
+background:var(--light);
+
+}
+
+
+
+.destination-info{
+
+padding:18px;
+
+}
+
+
+
+.destination-name{
+
+font-weight:700;
+
+}
+
+
+.destination-price{
+
+color:var(--primary);
+
+font-size:14px;
+
+margin-top:5px;
+
+}
+
+
+
+/* REVIEWS */
+
+
+.review-card{
+
+
+background:white;
+
+border-radius:18px;
+
+padding:25px;
+
+margin-top:30px;
+
+border:1px solid var(--border);
+
+}
+
+
+
+.review{
+
+padding:15px 0;
+
+border-bottom:1px solid var(--border);
+
+}
+
+
+
+.review:last-child{
+
+border:none;
+
+}
+
+
+
+.stars{
+
+color:#e89b20;
+
+}
+
+
+footer{
+
+text-align:center;
+
+padding:30px;
+
+color:#777;
+
+}
+
+
+
+@media(max-width:800px){
+
+.destinations{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+
+.nav-links{
+
+display:none;
+
+}
+
+.hero h1{
+
+font-size:28px;
+
+}
+
+
+}
+
+
+/* ============ PROFESSIONAL CTA BUTTON ============ */
+.cta-btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+background:linear-gradient(135deg,var(--primary),var(--secondary));
+color:white;
+border:none;
+padding:14px 28px;
+border-radius:12px;
+font-weight:700;
+font-size:15px;
+cursor:pointer;
+box-shadow:0 14px 28px rgba(7,104,255,.25);
+transition:.25s;
+}
+.cta-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 18px 34px rgba(7,104,255,.32);
+opacity:1;
+}
+.cta-btn:active{ transform:translateY(0); }
+.cta-btn:disabled{ opacity:.7;cursor:not-allowed;transform:none; }
+
+/* ============ PROFILE CHIP ============ */
+.profile-chip{
+position:relative;
+display:flex;
+align-items:center;
+gap:10px;
+cursor:pointer;
+padding:6px 14px 6px 6px;
+border-radius:999px;
+border:1px solid var(--border);
+background:white;
+}
+.profile-chip:hover{ border-color:rgba(7,104,255,.35); }
+.profile-avatar{
+width:34px;height:34px;border-radius:50%;
+background:linear-gradient(135deg,var(--primary),var(--accent));
+color:white;display:flex;align-items:center;justify-content:center;
+font-weight:700;font-size:14px;flex-shrink:0;
+}
+.profile-chip-name{ font-weight:600; font-size:14px; color:var(--dark); max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+.profile-dropdown{
+position:absolute;
+top:calc(100% + 10px);
+right:0;
+width:230px;
+background:white;
+border:1px solid var(--border);
+border-radius:14px;
+box-shadow:0 20px 45px rgba(9,31,78,.18);
+padding:8px;
+display:none;
+z-index:1200;
+}
+.profile-dropdown.open{ display:block; }
+.profile-dropdown-item{
+display:flex;align-items:center;gap:10px;
+padding:11px 12px;border-radius:10px;
+cursor:pointer;font-size:14px;font-weight:500;color:#334155;
+border:none;background:none;width:100%;text-align:left;
+}
+.profile-dropdown-item:hover{ background:var(--light); color:var(--primary); }
+.profile-dropdown-item.danger:hover{ background:#fef2f2; color:#dc2626; }
+.profile-dropdown hr{ border:none;border-top:1px solid var(--border); margin:6px 0; }
+
+/* ============ MODAL SYSTEM ============ */
+.modal-overlay{
+display:none;
+position:fixed;inset:0;
+background:rgba(9,20,45,.55);
+align-items:center;justify-content:center;
+z-index:2000;
+padding:20px;
+}
+.modal-overlay.open{ display:flex; }
+.modal-card{
+width:100%;max-width:460px;
+background:white;
+border-radius:22px;
+padding:32px;
+box-shadow:0 30px 70px rgba(9,31,78,.3);
+position:relative;
+max-height:90vh;
+overflow-y:auto;
+}
+.modal-card.wide{ max-width:600px; }
+.modal-close{
+position:absolute; top:18px; right:18px;
+border:none;background:var(--light);
+width:34px;height:34px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+cursor:pointer;color:var(--primary);font-size:16px;
+}
+.modal-icon{
+width:56px;height:56px;border-radius:16px;
+display:flex;align-items:center;justify-content:center;
+font-size:26px;margin-bottom:16px;
+background:var(--light);color:var(--primary);
+}
+.modal-icon.success{ background:#dcfce7; color:#16a34a; }
+.modal-title{ font-size:21px;font-weight:700;color:var(--dark);margin-bottom:6px; }
+.modal-subtitle{ color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.5; }
+.modal-form-group{ margin-bottom:14px; }
+.modal-form-group label{ display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#334155; }
+.modal-form-group input, .modal-form-group select{
+width:100%;padding:12px 14px;border:1px solid var(--border);
+border-radius:10px;font-size:14px;outline:none;
+}
+.modal-form-group input:focus{ border-color:var(--primary); box-shadow:0 0 0 3px rgba(7,104,255,.15); }
+.trip-summary-box{
+background:var(--light);border-radius:14px;padding:16px;margin-bottom:18px;
+font-size:14px;color:#1e293b;display:grid;gap:6px;
+}
+.trip-summary-box .row{ display:flex;justify-content:space-between;gap:10px; }
+.trip-summary-box .row b{ color:var(--dark); }
+.modal-btn-row{ display:flex; gap:10px; margin-top:6px; }
+.modal-btn-row .cta-btn{ flex:1; text-decoration:none; }
+.modal-btn-secondary{
+flex:1;background:white;border:1px solid var(--border);
+color:var(--dark);padding:14px;border-radius:12px;font-weight:600;
+cursor:pointer;font-size:15px;text-decoration:none;text-align:center;
+}
+.modal-btn-secondary:hover{ background:var(--light); }
+.booking-ref{
+background:var(--dark);color:white;padding:12px 16px;border-radius:12px;
+font-weight:700;letter-spacing:1px;text-align:center;margin-bottom:16px;font-size:15px;
+}
+
+/* ============ ACTIVITY LIST ============ */
+.activity-tabs{ display:flex;gap:8px;margin-bottom:18px; }
+.activity-tab{
+padding:9px 16px;border-radius:999px;border:1px solid var(--border);
+background:white;cursor:pointer;font-weight:600;font-size:13px;color:#555;
+}
+.activity-tab.active{ background:var(--primary);color:white;border-color:var(--primary); }
+.activity-item{
+border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;
+}
+.activity-item .top-row{ display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:10px; }
+.activity-item .title{ font-weight:700;color:var(--dark);font-size:14px; }
+.activity-item .meta{ font-size:12.5px;color:var(--muted); }
+.badge-confirmed{ background:#dcfce7;color:#16a34a;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap; }
+.empty-state{ text-align:center;padding:30px 10px;color:var(--muted);font-size:14px; }
+
+/* ============ CHAT ============ */
+.chat-row{ display:flex; margin-bottom:14px; gap:8px; align-items:flex-start; }
+.chat-row.user{ justify-content:flex-end; }
+.chat-avatar{
+width:30px;height:30px;border-radius:50%;flex-shrink:0;
+display:flex;align-items:center;justify-content:center;font-size:15px;
+background:var(--light);
+}
+.chat-bubble{ max-width:100%; padding:12px 14px; border-radius:14px; font-size:14.5px; line-height:1.55; }
+.chat-bubble.bot{ background:white;border:1px solid var(--border);border-bottom-left-radius:4px; }
+.chat-bubble.user{ background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;border-bottom-right-radius:4px; }
+.chat-time{ font-size:10.5px;color:var(--muted);margin-top:4px; }
+.typing-dots{ display:flex;gap:4px;padding:4px 0; }
+.typing-dots span{ width:6px;height:6px;border-radius:50%;background:#94a3b8;animation:typingBounce 1.2s infinite ease-in-out; }
+.typing-dots span:nth-child(2){ animation-delay:.15s; }
+.typing-dots span:nth-child(3){ animation-delay:.3s; }
+@keyframes typingBounce{ 0%,60%,100%{ transform:translateY(0); opacity:.5; } 30%{ transform:translateY(-4px); opacity:1; } }
+.chat-suggestions{ display:flex;flex-wrap:wrap;gap:8px;margin:14px 0; }
+.chat-chip{
+border:1px solid var(--border);background:white;color:var(--primary);
+padding:7px 14px;border-radius:999px;font-size:12.5px;font-weight:600;cursor:pointer;
+}
+.chat-chip:hover{ background:var(--light); }
+
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+<nav>
+
+
+<a class="logo" onclick="showPage('home')">
+
+<img src="assets/weekend-ai-logo.png" alt="Weekend AI" />
+
+</a>
+
+
+
+<div class="nav-links">
+
+
+<button class="nav-btn active" id="home-btn" onclick="showPage('home')">
+
+<i class="ti ti-home"></i>
+Home
+
+</button>
+
+
+
+<button class="nav-btn" id="plan-btn" onclick="showPage('plan')">
+
+<i class="ti ti-sparkles"></i>
+AI Planner
+
+</button>
+
+
+
+<button class="nav-btn" id="book-btn" onclick="showPage('book')">
+
+<i class="ti ti-ticket"></i>
+Booking
+
+</button>
+
+
+
+<button class="nav-btn" id="chat-btn" onclick="showPage('chat')">
+
+<i class="ti ti-message"></i>
+AI Chat
+
+</button>
+
+
+</div>
+
+
+
+<div class="auth-buttons" id="auth-buttons">
+
+<a href="login.html" class="auth-btn login-btn" style="text-decoration:none;display:inline-block;">
+
+Sign In
+
+</a>
+
+
+<a href="signup.html" class="auth-btn signup-btn" style="text-decoration:none;display:inline-block;">
+
+Sign Up
+
+</a>
+
+
+</div>
+
+
+
+<div class="profile-chip" id="profile-chip" style="display:none;" onclick="toggleProfileDropdown(event)">
+<div class="profile-avatar" id="profile-avatar">U</div>
+<span class="profile-chip-name" id="profile-chip-name">Traveler</span>
+<i class="ti ti-chevron-down" style="color:#94a3b8;font-size:13px;"></i>
+<div class="profile-dropdown" id="profile-dropdown">
+<button class="profile-dropdown-item" onclick="openProfileModal('profile')"><i class="ti ti-user"></i> Profile</button>
+<button class="profile-dropdown-item" onclick="openProfileModal('activity')"><i class="ti ti-history"></i> Activity</button>
+<hr>
+<button class="profile-dropdown-item danger" onclick="signOut()"><i class="ti ti-logout"></i> Sign Out</button>
+</div>
+</div>
+
+</nav>
+
+
+
+
+
+<!-- HOME PAGE -->
+
+
+<div class="page active" id="home">
+
+
+
+<div class="hero">
+
+
+<h1>
+Your Ultimate Travel Companion ✈️
+</h1>
+
+
+<p>
+
+Plan your trips with AI. Get personalized itineraries,
+hotel suggestions, transport options and budget planning
+for Bangladesh travel.
+
+</p>
+
+
+
+<div class="search-box">
+
+
+<input 
+id="home-search"
+placeholder="Where do you want to go? Cox's Bazar, Sylhet..."
+>
+
+
+<button onclick="goPlanner()">
+
+Plan With AI
+
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="section-title">
+
+🔥 Popular Destinations
+
+</div>
+
+
+
+<div class="destinations">
+
+
+<div class="destination-card" onclick="selectDestination('Cox Bazar')">
+
+
+<div class="destination-img">
+
+🏖️
+
+</div>
+
+
+<div class="destination-info">
+
+<div class="destination-name">
+
+Cox's Bazar
+
+</div>
+
+
+<div class="destination-price">
+
+From ৳2500
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="destination-card" onclick="selectDestination('Sylhet')">
+
+
+<div class="destination-img">
+
+🌿
+
+</div>
+
+
+<div class="destination-info">
+
+<div class="destination-name">
+
+Sylhet
+
+</div>
+
+
+<div class="destination-price">
+
+From ৳1800
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="destination-card" onclick="selectDestination('Bandarban')">
+
+
+<div class="destination-img">
+
+⛰️
+
+</div>
+
+
+<div class="destination-info">
+
+<div class="destination-name">
+
+Bandarban
+
+</div>
+
+
+<div class="destination-price">
+
+From ৳2100
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="destination-card" onclick="selectDestination('Sundarbans')">
+
+
+<div class="destination-img">
+
+🐅
+
+</div>
+
+
+<div class="destination-info">
+
+<div class="destination-name">
+
+Sundarbans
+
+</div>
+
+
+<div class="destination-price">
+
+From ৳3200
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="review-card">
+
+
+<div class="section-title">
+
+⭐ Traveler Reviews
+
+</div>
+
+
+
+<div class="review">
+
+<b>Rafiq Ahmed</b>
+
+<div class="stars">
+
+★★★★★
+
+</div>
+
+
+<p>
+
+Weekend AI planned my Cox's Bazar trip perfectly.
+
+</p>
+
+
+</div>
+
+
+
+
+<div class="review">
+
+
+<b>Nusrat Jahan</b>
+
+<div class="stars">
+
+★★★★★
+
+</div>
+
+
+<p>
+
+Budget planning was accurate and useful.
+
+</p>
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+</div>
+
+<!-- AI PLANNER PAGE -->
+
+<div class="page" id="plan">
+
+
+<div class="section-title">
+
+✨ AI Trip Planner
+
+</div>
+
+
+<div class="review-card">
+
+
+<div style="display:grid;gap:15px;">
+
+
+
+<input 
+id="origin"
+placeholder="Starting location (Example: Dhaka)"
+value="Dhaka"
+>
+
+
+
+<input 
+id="destination"
+placeholder="Destination (Example: Cox's Bazar)"
+>
+
+
+
+<input 
+id="budget"
+type="number"
+placeholder="Budget in BDT"
+>
+
+
+
+<input 
+id="days"
+type="number"
+placeholder="Number of days"
+value="3"
+>
+
+
+
+
+<select id="travel-style">
+
+<option>
+Adventure
+</option>
+
+<option>
+Family Trip
+</option>
+
+<option>
+Couple Trip
+</option>
+
+<option>
+Budget Travel
+</option>
+
+<option>
+Luxury Travel
+</option>
+
+
+</select>
+
+
+
+<button class="signup-btn"
+style="padding:15px;"
+onclick="generateTrip()">
+
+✨ Generate AI Plan
+
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div id="ai-loading"
+style="
+display:none;
+margin-top:20px;
+background:white;
+padding:20px;
+border-radius:15px;
+">
+
+🤖 Weekend AI is creating your perfect trip...
+
+</div>
+
+
+
+
+
+<div id="ai-result"
+class="review-card"
+style="display:none;">
+
+<h3>
+
+Your AI Generated Plan
+
+</h3>
+
+
+<div id="trip-output"
+style="
+margin-top:15px;
+line-height:1.8;
+">
+
+</div>
+
+
+<button 
+class="cta-btn"
+style="margin-top:24px;width:100%;max-width:320px;"
+onclick="openBookingModal()">
+
+<i class="ti ti-ticket"></i> Book This Trip
+
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- BOOKING PAGE -->
+
+
+<div class="page" id="book">
+
+
+<div class="section-title">
+
+🎫 Book Your Trip
+
+</div>
+
+
+
+
+<div class="destinations">
+
+
+<div class="destination-card">
+
+
+<div class="destination-img">
+
+🏨
+
+</div>
+
+
+<div class="destination-info">
+
+
+<h3>
+
+Hotels
+
+</h3>
+
+
+<p>
+
+Find hotels and resorts
+
+</p>
+
+
+<button class="signup-btn">
+
+Search Hotels
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="destination-card">
+
+
+<div class="destination-img">
+
+🚌
+
+</div>
+
+
+<div class="destination-info">
+
+
+<h3>
+
+Transport
+
+</h3>
+
+
+<p>
+
+Bus, train and flights
+
+</p>
+
+
+<button class="signup-btn">
+
+Find Transport
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="destination-card">
+
+
+<div class="destination-img">
+
+🍽️
+
+</div>
+
+
+<div class="destination-info">
+
+
+<h3>
+
+Restaurants
+
+</h3>
+
+
+<p>
+
+Local food suggestions
+
+</p>
+
+
+<button class="signup-btn">
+
+Explore Food
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="destination-card">
+
+
+<div class="destination-img">
+
+💳
+
+</div>
+
+
+<div class="destination-info">
+
+
+<h3>
+
+Payment
+
+</h3>
+
+
+<p>
+
+bKash, Nagad, Cards
+
+</p>
+
+
+<button class="signup-btn">
+
+Pay Securely
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+<!-- CHAT PAGE -->
+
+
+<div class="page" id="chat">
+
+
+<div class="section-title">
+
+🤖 Weekend AI Assistant
+
+</div>
+
+
+
+
+<div class="review-card">
+
+
+<div id="chat-box"
+style="
+height:380px;
+overflow:auto;
+padding:14px;
+background:#f5f7f6;
+border-radius:15px;
+">
+
+
+<div class="chat-row">
+<div class="chat-avatar">🤖</div>
+<div>
+<div class="chat-bubble bot">👋 Hello! I'm Weekend AI, your travel buddy for Bangladesh. Ask me about destinations, hotels, transport, or budgets &mdash; I'm happy to help!</div>
+</div>
+</div>
+
+
+</div>
+
+
+<div class="chat-suggestions">
+<button class="chat-chip" onclick="sendQuickMessage('Best places to visit in winter')">Best winter destinations</button>
+<button class="chat-chip" onclick="sendQuickMessage('How much does a weekend trip cost?')">Trip budget</button>
+<button class="chat-chip" onclick="sendQuickMessage('Tell me about Cox\'s Bazar')">Cox's Bazar</button>
+<button class="chat-chip" onclick="sendQuickMessage('How do I book a trip?')">How to book</button>
+</div>
+
+
+<div style="
+display:flex;
+gap:10px;
+">
+
+
+<input
+id="chat-input"
+placeholder="Ask about travel..."
+onkeydown="if(event.key==='Enter'){sendMessage();}"
+style="
+flex:1;
+padding:12px;
+border-radius:10px;
+border:1px solid #ddd;
+"
+>
+
+
+
+<button 
+class="cta-btn"
+id="chat-send-btn"
+onclick="sendMessage()">
+
+<i class="ti ti-send"></i> Send
+
+</button>
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="booking-modal-overlay">
+<div class="modal-card" id="booking-modal-card"></div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="profile-modal-overlay">
+<div class="modal-card wide" id="profile-modal-card"></div>
+</div>
+
+<footer>
+
+Weekend AI © 2026 | MIS-465 Project | Independent University Bangladesh
+
+</footer>
+
+<script>
+
+
+// ===============================
+// PAGE SWITCHING
+// ===============================
+
+
+function showPage(page){
+
+
+document.querySelectorAll(".page")
+.forEach(p=>{
+p.classList.remove("active");
+});
+
+
+document.getElementById(page)
+.classList.add("active");
+
+
+
+document.querySelectorAll(".nav-btn")
+.forEach(btn=>{
+btn.classList.remove("active");
+});
+
+
+
+let activeBtn=document.getElementById(page+"-btn");
+
+if(activeBtn){
+activeBtn.classList.add("active");
+}
+
+
+window.scrollTo(0,0);
+
+
+}
+
+
+
+
+// ===============================
+// HOME SEARCH
+// ===============================
+
+
+function goPlanner(){
+
+
+let place=document.getElementById("home-search").value;
+
+
+if(place){
+
+document.getElementById("destination").value=place;
+
+}
+
+
+showPage("plan");
+
+
+}
+
+
+
+
+
+function selectDestination(place){
+
+
+document.getElementById("destination").value=place;
+
+
+showPage("plan");
+
+
+}
+
+
+
+
+
+
+// ===============================
+// AI TRIP PLANNER
+// ===============================
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function formatMoney(value) {
+  const numericValue = Number(value || 0);
+  return `৳${numericValue.toLocaleString("en-BD")}`;
+}
+
+function parseStructuredPlan(payload) {
+  if (!payload) return null;
+
+  if (payload.structuredPlan && typeof payload.structuredPlan === "object") {
+    return payload.structuredPlan;
+  }
+
+  if (payload.plan && typeof payload.plan === "object") {
+    return payload.plan;
+  }
+
+  const text = payload.text || payload.content?.[0]?.text || "";
+  if (!text) return null;
+
+  const cleaned = String(text).trim().replace(/^```(?:json)?/i, "").replace(/```$/i, "").trim();
+  try {
+    return JSON.parse(cleaned);
+  } catch (error) {
+    return null;
+  }
+}
+
+function buildTable(headers, rows) {
+  const headerHtml = headers.map((header) => `<th style="text-align:left;padding:10px 8px;border-bottom:1px solid #e5e7eb;background:#f8fafc;">${escapeHtml(header)}</th>`).join("");
+  const rowHtml = rows.map((row) => `<tr>${row.map((cell) => `<td style="padding:10px 8px;border-bottom:1px solid #f1f5f9;vertical-align:top;">${escapeHtml(cell)}</td>`).join("")}</tr>`).join("");
+
+  return `<table style="width:100%;border-collapse:collapse;font-size:14px;margin:10px 0 16px;"><thead><tr>${headerHtml}</tr></thead><tbody>${rowHtml}</tbody></table>`;
+}
+
+function renderTripPlan(plan) {
+  const overview = plan?.overview || {};
+  const journey = Array.isArray(plan?.journey) ? plan.journey : [];
+  const accommodation = Array.isArray(plan?.accommodation) ? plan.accommodation : [];
+  const foodPlan = Array.isArray(plan?.foodPlan) ? plan.foodPlan : [];
+  const activities = Array.isArray(plan?.activities) ? plan.activities : [];
+  const dailyCosts = Array.isArray(plan?.dailyCosts) ? plan.dailyCosts : [];
+  const summary = plan?.summary || {};
+
+  const journeyRows = journey.map((item) => [
+    item?.departureTime || "—",
+    `${item?.from || "—"} → ${item?.to || "—"}`,
+    item?.transport || item?.mode || "—",
+    item?.provider || "—",
+    item?.arrivalTime || "—",
+    item?.duration || "—",
+    formatMoney(item?.cost || 0),
+    item?.details || "—"
+  ]);
+
+  const accommodationRows = accommodation.map((item) => [
+    item?.hotelName || "—",
+    item?.location || "—",
+    item?.roomType || "—",
+    item?.nights || "—",
+    formatMoney(item?.costPerNight || 0),
+    formatMoney(item?.totalCost || 0)
+  ]);
+
+  const foodRows = foodPlan.map((item) => [
+    item?.meal || "—",
+    item?.restaurant || "—",
+    item?.foodItems || "—",
+    formatMoney(item?.cost || 0)
+  ]);
+
+  const activityRows = activities.map((item) => [
+    item?.place || "—",
+    item?.transport || "—",
+    item?.details || "—",
+    formatMoney(item?.entryFee || 0),
+    formatMoney(item?.localTransportCost || 0)
+  ]);
+
+  const dailyRows = dailyCosts.map((day) => [
+    day?.day || "—",
+    formatMoney(day?.transport || 0),
+    formatMoney(day?.hotel || 0),
+    formatMoney(day?.food || 0),
+    formatMoney(day?.activities || 0),
+    formatMoney(day?.other || 0),
+    formatMoney(day?.total || 0)
+  ]);
+
+  const summaryRows = [
+    ["Transportation", formatMoney(summary?.transport || 0)],
+    ["Hotels", formatMoney(summary?.hotels || 0)],
+    ["Food", formatMoney(summary?.food || 0)],
+    ["Activities", formatMoney(summary?.activities || 0)],
+    ["Extra", formatMoney(summary?.extra || 0)],
+    ["Grand Total", formatMoney(summary?.grandTotal || 0)]
+  ];
+
+  return `
+    <div style="display:grid;gap:16px;">
+      <div style="background:#f8fafc;padding:16px;border-radius:14px;border:1px solid #e2e8f0;">
+        <h3 style="margin:0 0 8px;color:#0a2b67;">${escapeHtml(plan?.tripTitle || "AI Travel Itinerary")}</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;font-size:14px;color:#334155;">
+          <div><b>Route:</b> ${escapeHtml(`${overview?.origin || "—"} → ${overview?.destination || "—"}`)}</div>
+          <div><b>Budget:</b> ${escapeHtml(formatMoney(overview?.budget || 0))}</div>
+          <div><b>Duration:</b> ${escapeHtml(`${overview?.days || 0} Days`)}</div>
+          <div><b>Style:</b> ${escapeHtml(overview?.style || "—")}</div>
+        </div>
+      </div>
+
+      <div>
+        <h4 style="margin:0 0 8px;color:#0a2b67;">1. Complete Travel Journey</h4>
+        ${journey.length ? buildTable(["Departure", "Route", "Transport", "Provider", "Arrival", "Duration", "Cost", "Details"], journeyRows) : "<p style='margin:0 0 12px;color:#64748b;'>Journey details will appear here.</p>"}
+      </div>
+
+      <div>
+        <h4 style="margin:0 0 8px;color:#0a2b67;">2. Accommodation Details</h4>
+        ${accommodation.length ? buildTable(["Hotel", "Location", "Room", "Nights", "Cost/Night", "Total"], accommodationRows) : "<p style='margin:0 0 12px;color:#64748b;'>Accommodation details will appear here.</p>"}
+      </div>
+
+      <div>
+        <h4 style="margin:0 0 8px;color:#0a2b67;">3. Food Plan</h4>
+        ${foodPlan.length ? buildTable(["Meal", "Restaurant", "Food Items", "Cost"], foodRows) : "<p style='margin:0 0 12px;color:#64748b;'>Food plan will appear here.</p>"}
+      </div>
+
+      <div>
+        <h4 style="margin:0 0 8px;color:#0a2b67;">4. Activities</h4>
+        ${activities.length ? buildTable(["Place", "Transport", "Activity", "Entry Fee", "Local Transport"], activityRows) : "<p style='margin:0 0 12px;color:#64748b;'>Activity plan will appear here.</p>"}
+      </div>
+
+      <div>
+        <h4 style="margin:0 0 8px;color:#0a2b67;">5. Daily Cost Breakdown</h4>
+        ${dailyCosts.length ? buildTable(["Day", "Transport", "Hotel", "Food", "Activities", "Other", "Total"], dailyRows) : "<p style='margin:0 0 12px;color:#64748b;'>Daily cost breakdown will appear here.</p>"}
+      </div>
+
+      <div>
+        <h4 style="margin:0 0 8px;color:#0a2b67;">6. Full Trip Summary</h4>
+        ${summaryRows.length ? buildTable(["Category", "Total"], summaryRows) : "<p style='margin:0 0 12px;color:#64748b;'>Trip summary will appear here.</p>"}
+      </div>
+    </div>
+  `;
+}
+
+async function generateTrip(){
+
+
+let origin=
+document.getElementById("origin").value;
+
+
+let destination=
+document.getElementById("destination").value;
+
+
+let budget=
+document.getElementById("budget").value;
+
+
+let days=
+document.getElementById("days").value;
+
+
+let style=
+document.getElementById("travel-style").value;
+
+
+
+if(!destination){
+
+alert("Please enter destination");
+
+return;
+
+}
+
+
+
+document.getElementById("ai-loading")
+.style.display="block";
+
+
+document.getElementById("ai-result")
+.style.display="none";
+
+
+document.getElementById("trip-output").innerHTML="";
+
+
+try {
+  const response = await fetch("/api/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      system: `You are Weekend AI, a professional travel planning assistant for Bangladesh. Never return plain text. Return ONLY valid JSON that matches this structure and uses real travel details for the user's trip. Structure: {"tripTitle":"string","overview":{"origin":"string","destination":"string","budget":number,"days":number,"style":"string"},"journey":[{"from":"string","to":"string","mode":"string","transport":"string","provider":"string","departureTime":"string","arrivalTime":"string","duration":"string","cost":number,"details":"string"}],"accommodation":[{"hotelName":"string","location":"string","roomType":"string","nights":number,"costPerNight":number,"totalCost":number}],"foodPlan":[{"meal":"Breakfast|Lunch|Dinner","restaurant":"string","foodItems":"string","cost":number}],"activities":[{"place":"string","transport":"string","details":"string","entryFee":number,"localTransportCost":number}],"dailyCosts":[{"day":"string","transport":number,"hotel":number,"food":number,"activities":number,"other":number,"total":number}],"summary":{"transport":number,"hotels":number,"food":number,"activities":number,"extra":number,"grandTotal":number}}. Do not include markdown or explanations.`,
+      messages: [{ role: "user", content: `Create a complete travel itinerary from ${origin || "Dhaka"} to ${destination}. Budget is ৳${budget || "8000"}. Trip duration is ${days || "3"} days. Travel style is ${style || "Adventure"}. Include all journey, accommodation, food, activities, daily costs, and a full trip summary.` }]
+    })
+  });
+
+  const data = await response.json();
+  const plan = parseStructuredPlan(data);
+
+  const finalPlan = plan || {
+    tripTitle: `${destination} Trip Plan`,
+    overview: {
+      origin: origin || "Dhaka",
+      destination,
+      budget: Number(budget || 8000),
+      days: Number(days || 3),
+      style: style || "Adventure"
+    },
+    journey: [],
+    accommodation: [],
+    foodPlan: [],
+    activities: [],
+    dailyCosts: [],
+    summary: {}
+  };
+
+  currentTripPlan = finalPlan;
+  document.getElementById("trip-output").innerHTML = renderTripPlan(finalPlan);
+} catch (error) {
+  document.getElementById("trip-output").innerHTML = `
+    <div style="background:#fff7ed;padding:16px;border-radius:12px;border:1px solid #fdba74;color:#9a2c00;">
+      Unable to generate the itinerary right now. Please try again.
+    </div>
+  `;
+}
+
+
+document.getElementById("ai-loading")
+.style.display="none";
+
+
+document.getElementById("ai-result")
+.style.display="block";
+
+}
+
+
+
+
+
+
+// ===============================
+// AI CHAT
+// ===============================
+
+let chatHistory = [];
+
+function sendQuickMessage(text){
+  document.getElementById("chat-input").value = text;
+  sendMessage();
+}
+
+function nowTime(){
+  return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+function appendChatRow(role, html){
+  const box = document.getElementById("chat-box");
+  const isUser = role === "user";
+  const row = document.createElement("div");
+  row.className = "chat-row" + (isUser ? " user" : "");
+  row.innerHTML = isUser
+    ? `<div><div class="chat-bubble user">${html}</div><div class="chat-time" style="text-align:right;">${nowTime()}</div></div>`
+    : `<div class="chat-avatar">🤖</div><div><div class="chat-bubble bot">${html}</div><div class="chat-time">${nowTime()}</div></div>`;
+  box.appendChild(row);
+  box.scrollTop = box.scrollHeight;
+  return row;
+}
+
+function showTypingIndicator(){
+  const box = document.getElementById("chat-box");
+  const row = document.createElement("div");
+  row.className = "chat-row";
+  row.id = "typing-row";
+  row.innerHTML = `<div class="chat-avatar">🤖</div><div class="chat-bubble bot"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  box.appendChild(row);
+  box.scrollTop = box.scrollHeight;
+}
+
+function hideTypingIndicator(){
+  const row = document.getElementById("typing-row");
+  if (row) row.remove();
+}
+
+async function sendMessage(){
+  const input = document.getElementById("chat-input");
+  const message = input.value.trim();
+  if (!message) return;
+
+  appendChatRow("user", escapeHtml(message));
+  input.value = "";
+
+  const sendBtn = document.getElementById("chat-send-btn");
+  sendBtn.disabled = true;
+  showTypingIndicator();
+
+  try {
+    const res = await fetch("/api/chatbot", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, history: chatHistory })
+    });
+    const data = await res.json();
+    hideTypingIndicator();
+    const reply = data.reply || "I can help you with destinations, hotels, transport and travel budgets in Bangladesh.";
+    appendChatRow("bot", escapeHtml(reply).replace(/\n/g, "<br>"));
+    chatHistory.push({ role: "user", content: message });
+    chatHistory.push({ role: "assistant", content: reply });
+    if (chatHistory.length > 10) chatHistory = chatHistory.slice(-10);
+  } catch (err) {
+    hideTypingIndicator();
+    appendChatRow("bot", "Sorry, I'm having trouble connecting right now. Please try again in a moment.");
+  }
+
+  sendBtn.disabled = false;
+}
+
+
+// ===============================
+// AUTH STATE / PROFILE CHIP
+// ===============================
+
+function getStoredUser(){
+  try {
+    return JSON.parse(localStorage.getItem("weekendai_user") || "null");
+  } catch (e) {
+    return null;
+  }
+}
+
+function isLoggedIn(){
+  return localStorage.getItem("loggedIn") === "true" && !!getStoredUser();
+}
+
+function getInitials(name){
+  const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "U";
+  return (parts[0][0] + (parts[1] ? parts[1][0] : "")).toUpperCase();
+}
+
+function initAuthUI(){
+  const authButtons = document.getElementById("auth-buttons");
+  const profileChip = document.getElementById("profile-chip");
+  if (isLoggedIn()) {
+    const user = getStoredUser();
+    authButtons.style.display = "none";
+    profileChip.style.display = "flex";
+    document.getElementById("profile-avatar").textContent = getInitials(user.full_name || user.email);
+    document.getElementById("profile-chip-name").textContent = (user.full_name || user.email || "").split(" ")[0];
+  } else {
+    authButtons.style.display = "flex";
+    profileChip.style.display = "none";
+  }
+}
+
+function toggleProfileDropdown(event){
+  event.stopPropagation();
+  document.getElementById("profile-dropdown").classList.toggle("open");
+}
+
+document.addEventListener("click", function () {
+  const dd = document.getElementById("profile-dropdown");
+  if (dd) dd.classList.remove("open");
+});
+
+function signOut(){
+  localStorage.removeItem("loggedIn");
+  localStorage.removeItem("userEmail");
+  localStorage.removeItem("userName");
+  localStorage.removeItem("weekendai_user");
+  window.location.reload();
+}
+
+
+// ===============================
+// PROFILE MODAL (Profile + Activity)
+// ===============================
+
+function openProfileModal(tab){
+  const dd = document.getElementById("profile-dropdown");
+  if (dd) dd.classList.remove("open");
+  const user = getStoredUser();
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+  renderProfileModal(tab || "profile", user);
+  document.getElementById("profile-modal-overlay").classList.add("open");
+}
+
+function closeProfileModal(){
+  document.getElementById("profile-modal-overlay").classList.remove("open");
+}
+
+function renderProfileModal(tab, user){
+  const card = document.getElementById("profile-modal-card");
+  const isProfile = tab === "profile";
+  card.innerHTML = `
+    <button class="modal-close" onclick="closeProfileModal()"><i class="ti ti-x"></i></button>
+    <div class="modal-icon"><i class="ti ti-user"></i></div>
+    <div class="modal-title">${escapeHtml(user.full_name || "Traveler")}</div>
+    <div class="modal-subtitle">${escapeHtml(user.email || "")}</div>
+    <div class="activity-tabs">
+      <div class="activity-tab ${isProfile ? "active" : ""}" onclick="renderProfileModal('profile', getStoredUser())">Profile</div>
+      <div class="activity-tab ${!isProfile ? "active" : ""}" onclick="renderProfileModal('activity', getStoredUser())">Activity</div>
+    </div>
+    <div id="profile-modal-body">
+      ${isProfile ? renderProfileInfo(user) : '<div class="empty-state">Loading your activity…</div>'}
+    </div>
+  `;
+  if (!isProfile) {
+    loadActivity(user);
+  }
+}
+
+function renderProfileInfo(user){
+  return `
+    <div class="trip-summary-box">
+      <div class="row"><span>Full Name</span><b>${escapeHtml(user.full_name || "—")}</b></div>
+      <div class="row"><span>Email</span><b>${escapeHtml(user.email || "—")}</b></div>
+      <div class="row"><span>Phone</span><b>${escapeHtml(user.phone || "—")}</b></div>
+      <div class="row"><span>Travel Style</span><b>${escapeHtml(user.travel_style || "—")}</b></div>
+    </div>
+  `;
+}
+
+async function loadActivity(user){
+  const body = document.getElementById("profile-modal-body");
+  try {
+    const res = await fetch(`/api/bookings?user_id=${encodeURIComponent(user.user_id || "")}`);
+    const data = await res.json();
+    const bookings = Array.isArray(data.bookings) ? data.bookings : [];
+    if (!bookings.length) {
+      body.innerHTML = `<div class="empty-state"><i class="ti ti-ticket" style="font-size:28px;display:block;margin-bottom:8px;"></i>No bookings yet. Plan a trip in the AI Planner and book it to see it here!</div>`;
+      return;
+    }
+    body.innerHTML = bookings.map((b) => `
+      <div class="activity-item">
+        <div class="top-row">
+          <span class="title">${escapeHtml(b.origin || "Dhaka")} → ${escapeHtml(b.destination || "")}</span>
+          <span class="badge-confirmed">${escapeHtml(b.status || "confirmed")}</span>
+        </div>
+        <div class="meta">${escapeHtml(b.booking_ref)} · ${escapeHtml(String(b.travelers || 1))} traveler(s) · ${escapeHtml(String(b.days || 1))} days · ${formatMoney(b.budget || 0)}</div>
+      </div>
+    `).join("");
+  } catch (err) {
+    body.innerHTML = `<div class="empty-state">Unable to load your activity right now. Please try again later.</div>`;
+  }
+}
+
+
+// ===============================
+// BOOKING MODAL
+// ===============================
+
+let currentTripPlan = null;
+
+function openBookingModal(){
+  if (!currentTripPlan) {
+    alert("Please generate a trip plan first, then tap Book This Trip.");
+    return;
+  }
+  if (!isLoggedIn()) {
+    localStorage.setItem("pendingBooking", JSON.stringify(currentTripPlan));
+    renderBookingAuthStep();
+  } else {
+    renderBookingDetailsStep();
+  }
+  document.getElementById("booking-modal-overlay").classList.add("open");
+}
+
+function closeBookingModal(){
+  document.getElementById("booking-modal-overlay").classList.remove("open");
+}
+
+function tripSummaryHtml(plan){
+  const overview = plan?.overview || plan || {};
+  const grandTotal = plan?.summary?.grandTotal || overview.budget || 0;
+  return `
+    <div class="trip-summary-box">
+      <div class="row"><span>Route</span><b>${escapeHtml(overview.origin || "Dhaka")} → ${escapeHtml(overview.destination || "—")}</b></div>
+      <div class="row"><span>Duration</span><b>${escapeHtml(String(overview.days || "—"))} days</b></div>
+      <div class="row"><span>Style</span><b>${escapeHtml(overview.style || "—")}</b></div>
+      <div class="row"><span>Estimated Total</span><b>${formatMoney(grandTotal)}</b></div>
+    </div>
+  `;
+}
+
+function renderBookingAuthStep(){
+  const card = document.getElementById("booking-modal-card");
+  card.innerHTML = `
+    <button class="modal-close" onclick="closeBookingModal()"><i class="ti ti-x"></i></button>
+    <div class="modal-icon"><i class="ti ti-lock"></i></div>
+    <div class="modal-title">Sign in to book this trip</div>
+    <div class="modal-subtitle">Create a free account or sign in to confirm your booking — we'll bring you right back here to finish it.</div>
+    ${tripSummaryHtml(currentTripPlan)}
+    <div class="modal-btn-row">
+      <a href="login.html" class="cta-btn">Sign In</a>
+      <a href="signup.html" class="modal-btn-secondary">Sign Up</a>
+    </div>
+  `;
+}
+
+function renderBookingDetailsStep(){
+  const user = getStoredUser() || {};
+  const card = document.getElementById("booking-modal-card");
+  card.innerHTML = `
+    <button class="modal-close" onclick="closeBookingModal()"><i class="ti ti-x"></i></button>
+    <div class="modal-icon"><i class="ti ti-ticket"></i></div>
+    <div class="modal-title">Confirm your booking</div>
+    <div class="modal-subtitle">Double check the details below before we lock in your trip.</div>
+    ${tripSummaryHtml(currentTripPlan)}
+    <div class="modal-form-group">
+      <label>Traveler Name</label>
+      <input id="booking-name" value="${escapeHtml(user.full_name || "")}" placeholder="Full name" />
+    </div>
+    <div class="modal-form-group">
+      <label>Number of Travelers</label>
+      <input id="booking-travelers" type="number" min="1" value="1" />
+    </div>
+    <div id="booking-error" style="color:#dc2626;font-size:13px;margin-bottom:10px;display:none;"></div>
+    <button class="cta-btn" style="width:100%;" onclick="confirmBooking()"><i class="ti ti-circle-check"></i> Confirm Booking</button>
+  `;
+}
+
+async function confirmBooking(){
+  const user = getStoredUser() || {};
+  const nameField = document.getElementById("booking-name");
+  const travelersField = document.getElementById("booking-travelers");
+  const errorBox = document.getElementById("booking-error");
+  const name = nameField.value.trim();
+  const travelers = parseInt(travelersField.value, 10) || 0;
+
+  if (!name || travelers < 1) {
+    errorBox.style.display = "block";
+    errorBox.textContent = "Please enter your name and at least 1 traveler.";
+    return;
+  }
+  errorBox.style.display = "none";
+
+  const button = document.querySelector("#booking-modal-card .cta-btn");
+  button.disabled = true;
+  button.innerHTML = "Confirming…";
+
+  try {
+    const res = await fetch("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_id: user.user_id,
+        email: user.email,
+        full_name: name,
+        phone: user.phone,
+        travelers,
+        trip: currentTripPlan
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.removeItem("pendingBooking");
+      renderBookingSuccessStep(data.booking);
+    } else {
+      errorBox.style.display = "block";
+      errorBox.textContent = data.message || "Unable to confirm booking right now.";
+      button.disabled = false;
+      button.innerHTML = '<i class="ti ti-circle-check"></i> Confirm Booking';
+    }
+  } catch (err) {
+    errorBox.style.display = "block";
+    errorBox.textContent = "Unable to connect to the server. Please try again.";
+    button.disabled = false;
+    button.innerHTML = '<i class="ti ti-circle-check"></i> Confirm Booking';
+  }
+}
+
+function renderBookingSuccessStep(booking){
+  const card = document.getElementById("booking-modal-card");
+  card.innerHTML = `
+    <button class="modal-close" onclick="closeBookingModal()"><i class="ti ti-x"></i></button>
+    <div class="modal-icon success"><i class="ti ti-circle-check"></i></div>
+    <div class="modal-title">Booking Confirmed! 🎉</div>
+    <div class="modal-subtitle">Thanks, ${escapeHtml(booking.fullName || "traveler")} — your trip is locked in. You'll find this in your Activity tab anytime.</div>
+    <div class="booking-ref">${escapeHtml(booking.bookingRef)}</div>
+    <div class="trip-summary-box">
+      <div class="row"><span>Route</span><b>${escapeHtml(booking.origin)} → ${escapeHtml(booking.destination)}</b></div>
+      <div class="row"><span>Travelers</span><b>${escapeHtml(String(booking.travelers))}</b></div>
+      <div class="row"><span>Duration</span><b>${escapeHtml(String(booking.days))} days</b></div>
+      <div class="row"><span>Estimated Total</span><b>${formatMoney(booking.budget)}</b></div>
+    </div>
+    <button class="cta-btn" style="width:100%;" onclick="closeBookingModal()">Done</button>
+  `;
+}
+
+
+// ===============================
+// INIT
+// ===============================
+
+window.addEventListener("DOMContentLoaded", function () {
+  initAuthUI();
+  if (isLoggedIn()) {
+    const pending = localStorage.getItem("pendingBooking");
+    if (pending) {
+      try {
+        currentTripPlan = JSON.parse(pending);
+      } catch (e) {
+        currentTripPlan = null;
+      }
+      if (currentTripPlan) {
+        renderBookingDetailsStep();
+        document.getElementById("booking-modal-overlay").classList.add("open");
+      }
+    }
+  }
+});
+
+</script>
+
+
+</body>
+</html>
