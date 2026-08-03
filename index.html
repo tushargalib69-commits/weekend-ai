@@ -2653,7 +2653,7 @@ function renderReviewCardMini(review) {
   const dateLabel = new Date(review.review_date).toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
   return `
     <tr>
-      <td>${escapeHtml('★'.repeat(review.rating || 5) + '☆'.repeat(5 - (review.rating || 5)))}</td>
+      <td><span class="stars" aria-label="${escapeHtml(String(review.rating || 5))} out of 5 stars">${escapeHtml('★'.repeat(review.rating || 5) + '☆'.repeat(5 - (review.rating || 5)))}</span></td>
       <td>
         <strong>${escapeHtml(review.customer_name || 'Traveler')}</strong><br>
         <span class="review-meta">${escapeHtml(review.destination || 'Unknown trip')}</span>
