@@ -2656,7 +2656,7 @@ function renderReviewCardMini(review) {
         <span class="review-meta">${escapeHtml(review.destination || 'Unknown trip')}</span>
       </td>
       <td>${escapeHtml(review.destination || 'Unknown trip')}</td>
-      <td>${escapeHtml(review.review_text || '')}</td>
+      <td>${escapeHtml(review.review_text || 'Rating submitted without a written comment.')}</td>
       <td class="review-date">${escapeHtml(dateLabel)}</td>
     </tr>
   `;
@@ -2747,11 +2747,14 @@ function openReviewModal(bookingId, bookingRef, destination) {
       </select>
     </div>
     <div class="modal-form-group">
-      <label>Review</label>
-      <textarea id="review-text" rows="5"></textarea>
+      <label>Review <span style="color:var(--muted);font-weight:500;">(optional)</span></label>
+      <textarea id="review-text" rows="5" placeholder="Share any additional feedback, if you would like."></textarea>
     </div>
     <div id="review-error" style="color:#dc2626;font-size:13px;margin-bottom:10px;display:none;"></div>
-    <button class="cta-btn" style="width:100%;" onclick="submitReview()"><i class="ti ti-send"></i> Submit Review</button>
+    <div class="modal-btn-row">
+      <button class="modal-btn-secondary" type="button" onclick="closeReviewModal()">Skip for now</button>
+      <button class="cta-btn" type="button" onclick="submitReview()"><i class="ti ti-send"></i> Submit Review</button>
+    </div>
   `;
   document.getElementById("review-modal-overlay").classList.add("open");
 }
@@ -2772,9 +2775,9 @@ async function submitReview() {
   const errorBox = document.getElementById("review-error");
   const button = document.querySelector("#review-modal-card .cta-btn");
 
-  if (!name || !rating || !text) {
+  if (!name || !rating) {
     errorBox.style.display = "block";
-    errorBox.textContent = "Please fill in your name, rating, and review text.";
+    errorBox.textContent = "Please provide your name and rating.";
     return;
   }
   errorBox.style.display = "none";

@@ -609,9 +609,9 @@ const server = http.createServer(async (req, res) => {
       const reviewText = String(payload.review_text || "").trim();
       const reviewDate = String(payload.review_date || new Date().toISOString()).trim();
 
-      if (!bookingId || !userId || !bookingRef || !customerName || !destination || !rating || !reviewText) {
+      if (!bookingId || !userId || !bookingRef || !customerName || !destination || !rating) {
         res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ success: false, message: "All review fields are required." }));
+        res.end(JSON.stringify({ success: false, message: "Booking, traveler name, destination, and rating are required." }));
         return;
       }
 
