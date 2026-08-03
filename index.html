@@ -806,22 +806,26 @@ nav{
   box-shadow:0 3px 10px rgba(9,31,78,.1);
 }
 
-.auth-buttons,
-.profile-chip{ justify-self:end; }
+.account-area{
+  grid-column:3;
+  justify-self:end;
+  display:flex;
+  align-items:center;
+}
 
 @media (max-width:1000px){
   nav{ grid-template-columns:1fr auto; gap:10px 16px; }
   .nav-links{
     grid-column:1 / -1;
     grid-row:2;
-    justify-content:flex-start;
+    justify-content:center;
     overflow-x:auto;
     scrollbar-width:thin;
     -webkit-overflow-scrolling:touch;
   }
   .nav-btn{ flex:0 0 auto; }
   .mobile-menu-toggle,.mobile-nav-panel{ display:none !important; }
-  .auth-buttons{ display:flex !important; }
+  .account-area{ grid-column:2; }
 }
 
 @media (max-width:640px){
@@ -833,6 +837,7 @@ nav{
   .auth-btn{ padding:9px 12px; font-size:.84rem; }
   .auth-buttons{ gap:6px; }
   .profile-chip{ padding:5px 9px 5px 5px; }
+  .nav-links{ justify-content:flex-start; }
 }
 
 /* ============ MODAL SYSTEM ============ */
@@ -1001,6 +1006,7 @@ AI Chat
 
 
 
+<div class="account-area">
 <div class="auth-buttons" id="auth-buttons">
 
 <a href="login.html" class="auth-btn login-btn" style="text-decoration:none;display:inline-block;">
@@ -1031,6 +1037,8 @@ Sign Up
 <hr>
 <button class="profile-dropdown-item danger" onclick="signOut()"><i class="ti ti-logout"></i> Sign Out</button>
 </div>
+</div>
+
 </div>
 
 </nav>
