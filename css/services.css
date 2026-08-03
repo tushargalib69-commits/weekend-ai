@@ -41,7 +41,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 32px;
+  padding: 16px clamp(18px, 3vw, 40px);
   background: rgba(255,255,255,0.94);
   border-bottom: 1px solid #e2e8f0;
   position: sticky;
@@ -62,8 +62,8 @@ nav .logo img {
 
 .nav-links {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
 }
 
 .nav-links a,
@@ -71,7 +71,8 @@ nav .logo img {
   border: none;
   background: transparent;
   color: #334155;
-  padding: 10px 14px;
+  padding: 9px 12px;
+  white-space: nowrap;
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
@@ -220,17 +221,29 @@ nav .logo img {
   color: #0f172a;
 }
 
+.results-grid,
 .service-grid,
 .history-grid {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 18px;
   margin-top: 20px;
 }
 
-.results-grid {
+.results-grid.hotel-results-grid {
   display: block;
   width: 100%;
-  margin-top: 20px;
+}
+
+.result-card,
+.service-card,
+.history-card {
+  min-width: 0;
+  background: var(--card);
+  border: 1px solid rgba(226,232,240,.95);
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 16px 35px rgba(15,23,42,.05);
 }
 
 .hotel-table {
@@ -325,8 +338,12 @@ nav .logo img {
   }
 
   .nav-links {
+    order: 3;
     width: 100%;
     justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    padding-bottom: 3px;
   }
 
   .page-wrap {
@@ -341,13 +358,37 @@ nav .logo img {
 
 @media (max-width: 720px) {
   nav {
-    padding: 14px 18px;
+    padding: 12px 16px;
+    gap: 10px;
   }
 
   .nav-links {
-    gap: 8px;
+    gap: 2px;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding: 4px 0 2px;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-links a {
+    padding: 8px 10px;
+    font-size: .88rem;
+  }
+
+  nav .logo img {
+    height: 36px;
+  }
+
+  .auth-buttons,
+  .user-panel {
+    margin-left: auto;
+    gap: 6px;
+  }
+
+  .auth-btn,
+  .cta-btn,
+  .signup-btn {
+    padding: 11px 14px;
   }
 
   .search-panel,
@@ -437,6 +478,11 @@ nav .logo img {
     justify-content: center;
     margin-top: 4px;
   }
+
+  .hotel-table tbody tr td:nth-child(2)::before { content: 'Destination'; }
+  .hotel-table tbody tr td:nth-child(3)::before { content: 'Price per night'; }
+  .hotel-table tbody tr td:nth-child(2)::before,
+  .hotel-table tbody tr td:nth-child(3)::before { color: var(--muted); font-size: .88rem; font-weight: 600; }
 }
 
 
@@ -861,9 +907,25 @@ footer {
     gap: 14px;
   }
 
-  .auth-buttons,
-  .nav-links {
-    width: 100%;
-    justify-content: center;
+  .page-wrap {
+    width: min(calc(100% - 24px), 1180px);
+    margin: 14px auto 32px;
   }
+
+  .hero { margin-bottom: 20px; }
+  .hero h1 { font-size: 1.8rem; }
+  .hero p { font-size: .94rem; }
+
+  .search-panel { padding: 16px; }
+  .modal-overlay { padding: 10px; }
+  .modal-card { max-height: calc(100vh - 20px); padding: 20px 16px; border-radius: 20px; }
+  .modal-close { top: 10px; right: 10px; }
+  .modal-header { padding-right: 30px; }
+  .modal-actions > * { width: 100%; }
+  .modal-actions .cta-btn,
+  .modal-actions .signup-btn,
+  .modal-actions .auth-btn { min-width: 0; }
+  .toast-container { top: 12px; right: 12px; left: 12px; }
+  .toast { min-width: 0; max-width: none; }
+  footer { padding: 16px; font-size: .82rem; }
 }

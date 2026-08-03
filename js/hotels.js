@@ -278,6 +278,7 @@ function renderHotelResults() {
   const destination = document.getElementById('destination').value.trim() || getStoredDestination();
   const hotels = getHotelResults(destination);
   const container = document.getElementById('results-container');
+  container.classList.add('hotel-results-grid');
 
   if (!hotels.length) {
     container.innerHTML = '<div class="empty-state">No hotels were found for this destination. Try another destination above.</div>';
