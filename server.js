@@ -65,8 +65,13 @@ async function initDatabase() {
         phone TEXT,
         password TEXT NOT NULL,
         travel_style TEXT,
+        role TEXT DEFAULT 'customer',
         created_at TIMESTAMPTZ DEFAULT NOW()
       )
+    `);
+
+    await db.query(`
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'customer';
     `);
 
     await db.query(`
@@ -84,11 +89,49 @@ async function initDatabase() {
         budget INT,
         days INT,
         style TEXT,
-        plan_json JSONB,
+        travel_date DATE,
+        payment_status TEXT DEFAULT 'pending',
         status TEXT DEFAULT 'confirmed',
+        plan_json JSONB,
         created_at TIMESTAMPTZ DEFAULT NOW()
       )
     `);
+
+    await db.query(`
+      ALTER TABLE bookings ADD COLUMN IF NOT EXISTS travel_date DATE;
+      ALTER TABLE bookings ADD COLUMN IF NOT EXISTS payment_status TEXT DEFAULT 'pending';
+      ALTER TABLE bookings ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'confirmed';
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS reviews (
+        id SERIAL PRIMARY KEY,
+        booking_id INT NOT NULL,
+        user_id TEXT,
+        trip_id TEXT,
+        booking_ref TEXT,
+        customer_name TEXT,
+        destination TEXT,
+        rating INT,
+        review_text TEXT,
+        review_date TIMESTAMPTZ DEFAULT NOW(),
+        status TEXT DEFAULT 'published'
+      )
+    `);
+
+    const adminEmail = process.env.ADMIN_EMAIL || 'galib@gmail.com';
+    const adminPassword = process.env.ADMIN_PASSWORD || '125679@@';
+    const existingAdmin = await db.query(`SELECT * FROM users WHERE email = $1`, [adminEmail]);
+    if (existingAdmin.rowCount === 0) {
+      const adminId = `admin_${Date.now()}`;
+      await db.query(
+        `INSERT INTO users (user_id, full_name, email, phone, password, travel_style, role)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [adminId, 'Weekend AI Admin', adminEmail, '', hashPassword(adminPassword), 'Admin', 'admin']
+      );
+      console.log(`→ Admin account created: ${adminEmail}`);
+    }
+
     console.log("→ Database initialized.");
   } catch (err) {
     console.log("→ Database init skipped:", err.message);
@@ -506,6 +549,224 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  if (req.method === "GET" && req.url.startsWith("/api/bookings/count")) {
+    try {
+      const parsedUrl = new URL(req.url, "http://localhost");
+      const destination = String(parsedUrl.searchParams.get("destination") || "").trim();
+      if (!destination) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "destination is required" }));
+        return;
+      }
+      const result = await db.query(`SELECT * FROM bookings ORDER BY created_at DESC`);
+      const bookings = result.rows || [];
+      const count = bookings.filter((b) => String(b.destination || "").toLowerCase() === destination.toLowerCase() && ["confirmed", "completed"].includes(String(b.status || "").toLowerCase())).length;
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ count }));
+    } catch (err) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: err.message }));
+    }
+    return;
+  }
+
+  if (req.method === "GET" && req.url.startsWith("/api/reviews")) {
+    try {
+      const parsedUrl = new URL(req.url, "http://localhost");
+      const destination = String(parsedUrl.searchParams.get("destination") || "").trim().toLowerCase();
+      const bookingId = Number(parsedUrl.searchParams.get("booking_id") || 0);
+      const userId = String(parsedUrl.searchParams.get("user_id") || "").trim();
+      const result = await db.query(`SELECT * FROM reviews ORDER BY review_date DESC LIMIT 20`);
+      let rows = result.rows || [];
+      if (bookingId) {
+        rows = rows.filter((review) => Number(review.booking_id) === bookingId);
+      }
+      if (userId) {
+        rows = rows.filter((review) => String(review.user_id || "") === userId);
+      }
+      if (destination) {
+        rows = rows.filter((review) => String(review.destination || "").toLowerCase() === destination);
+      }
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ reviews: rows }));
+    } catch (err) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: err.message }));
+    }
+    return;
+  }
+
+  if (req.method === "POST" && req.url === "/api/reviews") {
+    try {
+      const body = await readRequestBody(req);
+      const payload = body ? JSON.parse(body) : {};
+      const bookingId = Number(payload.booking_id || 0);
+      const userId = String(payload.user_id || "").trim();
+      const bookingRef = String(payload.booking_ref || "").trim();
+      const customerName = String(payload.customer_name || "").trim();
+      const destination = String(payload.destination || "").trim();
+      const rating = Number(payload.rating || 0);
+      const reviewText = String(payload.review_text || "").trim();
+      const reviewDate = String(payload.review_date || new Date().toISOString()).trim();
+
+      if (!bookingId || !userId || !bookingRef || !customerName || !destination || !rating || !reviewText) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ success: false, message: "All review fields are required." }));
+        return;
+      }
+
+      const bookingResult = await db.query(`SELECT * FROM bookings WHERE id = $1`, [bookingId]);
+      const booking = bookingResult.rows[0];
+      if (!booking || !["confirmed", "completed"].includes(String(booking.status || "").toLowerCase())) {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ success: false, message: "Review can only be submitted for confirmed or completed bookings." }));
+        return;
+      }
+
+      const existingReview = await db.query(`SELECT * FROM reviews WHERE booking_id = $1`, [bookingId]);
+      if (existingReview.rowCount > 0) {
+        res.writeHead(409, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ success: false, message: "A review has already been submitted for this booking." }));
+        return;
+      }
+
+      await db.query(
+        `INSERT INTO reviews (booking_id, user_id, trip_id, booking_ref, customer_name, destination, rating, review_text, review_date, status)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+        [bookingId, userId, payload.trip_id || null, bookingRef, customerName, destination, rating, reviewText, reviewDate, "published"]
+      );
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ success: true, message: "Review submitted successfully." }));
+    } catch (err) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ success: false, message: err.message }));
+    }
+    return;
+  }
+
+  if (req.method === "GET" && req.url.startsWith("/api/admin/bookings")) {
+    try {
+      const parsedUrl = new URL(req.url, "http://localhost");
+      const adminUserId = String(parsedUrl.searchParams.get("user_id") || "").trim();
+      if (!adminUserId) {
+        res.writeHead(401, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Admin user_id is required." }));
+        return;
+      }
+      const adminCheck = await db.query(`SELECT * FROM users WHERE user_id = $1`, [adminUserId]);
+      if (!adminCheck.rows[0] || adminCheck.rows[0].role !== "admin") {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Admin access required." }));
+        return;
+      }
+
+      const search = String(parsedUrl.searchParams.get("search") || "").trim().toLowerCase();
+      const destination = String(parsedUrl.searchParams.get("destination") || "").trim().toLowerCase();
+      const bookingStatus = String(parsedUrl.searchParams.get("status") || "").trim().toLowerCase();
+      const paymentStatus = String(parsedUrl.searchParams.get("payment_status") || "").trim().toLowerCase();
+      const travelDate = String(parsedUrl.searchParams.get("travel_date") || "").trim();
+      const sort = String(parsedUrl.searchParams.get("sort") || "desc").toLowerCase();
+
+      const result = await db.query(`SELECT * FROM bookings ORDER BY created_at DESC`);
+      let allBookings = result.rows || [];
+
+      if (search) {
+        allBookings = allBookings.filter((b) => {
+          const value = `${b.full_name || ""} ${b.email || ""} ${b.booking_ref || ""} ${b.destination || ""} ${b.trip_title || ""}`.toLowerCase();
+          return value.includes(search);
+        });
+      }
+      if (destination) {
+        allBookings = allBookings.filter((b) => String(b.destination || "").toLowerCase() === destination);
+      }
+      if (bookingStatus) {
+        allBookings = allBookings.filter((b) => String(b.status || "").toLowerCase() === bookingStatus);
+      }
+      if (paymentStatus) {
+        allBookings = allBookings.filter((b) => String(b.payment_status || "").toLowerCase() === paymentStatus);
+      }
+      if (travelDate) {
+        allBookings = allBookings.filter((b) => String(b.travel_date || "").startsWith(travelDate));
+      }
+
+      if (sort === "asc") {
+        allBookings = allBookings.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      } else {
+        allBookings = allBookings.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      }
+
+      const summary = {
+        total: allBookings.length,
+        confirmed: allBookings.filter((b) => String(b.status || "").toLowerCase() === "confirmed").length,
+        pending: allBookings.filter((b) => String(b.status || "").toLowerCase() === "pending").length,
+        completed: allBookings.filter((b) => String(b.status || "").toLowerCase() === "completed").length,
+        cancelled: allBookings.filter((b) => String(b.status || "").toLowerCase() === "cancelled").length
+      };
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ bookings: allBookings, summary }));
+    } catch (err) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: err.message }));
+    }
+    return;
+  }
+
+  if (req.method === "POST" && req.url === "/api/admin/bookings/status") {
+    try {
+      const body = await readRequestBody(req);
+      const payload = body ? JSON.parse(body) : {};
+      const adminUserId = String(payload.user_id || "").trim();
+      const bookingId = Number(payload.booking_id || 0);
+      const status = String(payload.status || "").trim();
+      if (!adminUserId || !bookingId || !status) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ success: false, message: "Missing admin user_id, booking_id, or status." }));
+        return;
+      }
+      const adminCheck = await db.query(`SELECT * FROM users WHERE user_id = $1`, [adminUserId]);
+      if (!adminCheck.rows[0] || adminCheck.rows[0].role !== "admin") {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ success: false, message: "Admin access required." }));
+        return;
+      }
+      await db.query(`UPDATE bookings SET status = $1 WHERE id = $2`, [status, bookingId]);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ success: true, status }));
+    } catch (err) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ success: false, message: err.message }));
+    }
+    return;
+  }
+
+  if (req.method === "DELETE" && req.url.startsWith("/api/admin/bookings")) {
+    try {
+      const parsedUrl = new URL(req.url, "http://localhost");
+      const adminUserId = String(parsedUrl.searchParams.get("user_id") || "").trim();
+      const bookingId = Number(parsedUrl.searchParams.get("booking_id") || 0);
+      if (!adminUserId || !bookingId) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ success: false, message: "Missing admin user_id or booking_id." }));
+        return;
+      }
+      const adminCheck = await db.query(`SELECT * FROM users WHERE user_id = $1`, [adminUserId]);
+      if (!adminCheck.rows[0] || adminCheck.rows[0].role !== "admin") {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ success: false, message: "Admin access required." }));
+        return;
+      }
+      await db.query(`DELETE FROM bookings WHERE id = $1`, [bookingId]);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ success: true }));
+    } catch (err) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ success: false, message: err.message }));
+    }
+    return;
+  }
+
   if (req.method === "POST" && req.url === "/api/signup") {
     try {
       const body = await readRequestBody(req);
@@ -587,7 +848,8 @@ const server = http.createServer(async (req, res) => {
           full_name: user.full_name,
           email: user.email,
           phone: user.phone,
-          travel_style: user.travel_style
+          travel_style: user.travel_style,
+          role: user.role || "customer"
         }
       }));
     } catch (err) {
@@ -615,6 +877,8 @@ const server = http.createServer(async (req, res) => {
       const budget = Number(overview.budget || trip.summary?.grandTotal || 0);
       const days = Number(overview.days || 1);
       const style = String(overview.style || "Adventure").trim();
+      const travelDate = String(payload.travel_date || "").trim() || null;
+      const paymentStatus = String(payload.payment_status || "pending").trim() || "pending";
 
       if (!fullName || !email) {
         res.writeHead(400, { "Content-Type": "application/json" });
@@ -624,16 +888,17 @@ const server = http.createServer(async (req, res) => {
 
       const bookingRef = `WKD-${Date.now().toString(36).toUpperCase()}`;
 
-      await db.query(
-        `INSERT INTO bookings (booking_ref, user_id, full_name, email, phone, destination, origin, trip_title, travelers, budget, days, style, plan_json)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
-        [bookingRef, userId, fullName, email, phone, destination, origin, tripTitle, travelers, budget, days, style, JSON.stringify(trip)]
+      const insertResult = await db.query(
+        `INSERT INTO bookings (booking_ref, user_id, full_name, email, phone, destination, origin, trip_title, travelers, budget, days, style, travel_date, payment_status, status, plan_json)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING id`,
+        [bookingRef, userId, fullName, email, phone, destination, origin, tripTitle, travelers, budget, days, style, travelDate, paymentStatus, "confirmed", JSON.stringify(trip)]
       );
+      const bookingId = insertResult.rows?.[0]?.id || null;
 
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({
         success: true,
-        booking: { bookingRef, fullName, email, destination, origin, tripTitle, travelers, budget, days, style }
+        booking: { id: bookingId, bookingRef, fullName, email, destination, origin, tripTitle, travelers, budget, days, style, travel_date: travelDate, payment_status: paymentStatus }
       }));
     } catch (err) {
       console.log("← Booking error:", err.message);
@@ -648,7 +913,7 @@ const server = http.createServer(async (req, res) => {
       const parsedUrl = new URL(req.url, "http://localhost");
       const userId = parsedUrl.searchParams.get("user_id") || "";
       const result = await db.query(
-        `SELECT id, booking_ref, full_name, email, destination, origin, trip_title, travelers, budget, days, style, status, created_at
+        `SELECT id, booking_ref, full_name, email, phone, destination, origin, trip_title, travelers, budget, days, style, travel_date, payment_status, status, created_at
          FROM bookings WHERE user_id = $1 ORDER BY created_at DESC`,
         [userId]
       );

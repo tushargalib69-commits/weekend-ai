@@ -216,7 +216,11 @@
             localStorage.setItem('userEmail', result.user.email);
             localStorage.setItem('userName', result.user.full_name || result.user.email);
             localStorage.setItem('weekendai_user', JSON.stringify(result.user));
-            window.location.href = 'index.html';
+            if (result.user.role === 'admin') {
+              window.location.href = 'admin.html';
+            } else {
+              window.location.href = 'index.html';
+            }
             return;
           }
 

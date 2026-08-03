@@ -17,15 +17,18 @@ const localDbPath = path.join(__dirname, "localdb.json");
 
 function ensureLocalDb() {
   if (!fs.existsSync(localDbPath)) {
-    fs.writeFileSync(localDbPath, JSON.stringify({ users: [], travel_plans: [], bookings: [] }, null, 2), "utf-8");
+    fs.writeFileSync(localDbPath, JSON.stringify({ users: [], travel_plans: [], bookings: [], reviews: [] }, null, 2), "utf-8");
   }
 }
 
 function readLocalDb() {
   ensureLocalDb();
   const raw = fs.readFileSync(localDbPath, "utf-8");
-  const parsed = JSON.parse(raw || "{\"users\":[],\"travel_plans\":[],\"bookings\":[]}");
+  const parsed = JSON.parse(raw || "{\"users\":[],\"travel_plans\":[],\"bookings\":[],\"reviews\":[]}");
+  if (!parsed.users) parsed.users = [];
+  if (!parsed.travel_plans) parsed.travel_plans = [];
   if (!parsed.bookings) parsed.bookings = [];
+  if (!parsed.reviews) parsed.reviews = [];
   return parsed;
 }
 
@@ -33,12 +36,16 @@ function writeLocalDb(data) {
   fs.writeFileSync(localDbPath, JSON.stringify(data, null, 2), "utf-8");
 }
 
+function normalizeQuery(sql) {
+  return sql.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
 async function query(sql, params = []) {
   if (pool) {
     return pool.query(sql, params);
   }
 
-  const normalized = sql.trim().replace(/\s+/g, " ").toLowerCase();
+  const normalized = normalizeQuery(sql);
   const db = readLocalDb();
 
   if (normalized.startsWith("create table")) {
@@ -51,9 +58,15 @@ async function query(sql, params = []) {
     return { rows, rowCount: rows.length };
   }
 
-  if (normalized.startsWith("select * from users where email")) {
+  if (normalized.includes("from users where email")) {
     const email = params[0];
     const rows = db.users.filter((user) => user.email === email);
+    return { rows, rowCount: rows.length };
+  }
+
+  if (normalized.includes("from users where user_id")) {
+    const userId = params[0];
+    const rows = db.users.filter((user) => user.user_id === userId);
     return { rows, rowCount: rows.length };
   }
 
@@ -65,6 +78,7 @@ async function query(sql, params = []) {
       phone: params[3],
       password: params[4],
       travel_style: params[5],
+      role: params[6] || "customer",
       created_at: new Date().toISOString()
     };
     db.users.push(record);
@@ -107,8 +121,10 @@ async function query(sql, params = []) {
       budget: params[9],
       days: params[10],
       style: params[11],
-      plan_json: JSON.parse(params[12]),
-      status: "confirmed",
+      travel_date: params[12] || null,
+      payment_status: params[13] || "pending",
+      status: params[14] || "confirmed",
+      plan_json: JSON.parse(params[15]),
       created_at: new Date().toISOString()
     };
     db.bookings = db.bookings || [];
@@ -117,11 +133,106 @@ async function query(sql, params = []) {
     return { rows: [record], rowCount: 1 };
   }
 
-  if (normalized.startsWith("select id, booking_ref")) {
+  if (normalized.includes("from bookings where user_id")) {
     const userId = params[0];
     const rows = (db.bookings || [])
       .filter((b) => b.user_id === userId)
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return { rows, rowCount: rows.length };
+  }
+
+  if (normalized.includes("from bookings where destination")) {
+    const destination = String(params[0] || "").toLowerCase();
+    const rows = (db.bookings || []).filter((b) => String(b.destination || "").toLowerCase() === destination);
+    return { rows, rowCount: rows.length };
+  }
+
+  if (normalized.startsWith("select * from bookings order by created_at")) {
+    const rows = [...(db.bookings || [])].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return { rows, rowCount: rows.length };
+  }
+
+  if (normalized.startsWith("select count(*) from bookings where destination")) {
+    const destination = String(params[0] || "").toLowerCase();
+    const count = (db.bookings || []).filter((b) => String(b.destination || "").toLowerCase() === destination && ["confirmed","completed","pending","cancelled"].includes(String(b.status || "").toLowerCase())).length;
+    return { rows: [{ count }], rowCount: 1 };
+  }
+
+  if (normalized.startsWith("select count(*) from bookings where id")) {
+    const id = Number(params[0]);
+    const count = (db.bookings || []).filter((b) => Number(b.id) === id).length;
+    return { rows: [{ count }], rowCount: 1 };
+  }
+
+  if (normalized.startsWith("select * from bookings where id")) {
+    const id = Number(params[0]);
+    const rows = (db.bookings || []).filter((b) => Number(b.id) === id);
+    return { rows, rowCount: rows.length };
+  }
+
+  if (normalized.startsWith("update bookings set status")) {
+    const status = params[0];
+    const id = Number(params[1]);
+    const booking = (db.bookings || []).find((b) => Number(b.id) === id);
+    if (booking) {
+      booking.status = status;
+      writeLocalDb(db);
+      return { rows: [booking], rowCount: 1 };
+    }
+    return { rows: [], rowCount: 0 };
+  }
+
+  if (normalized.startsWith("delete from bookings where id")) {
+    const id = Number(params[0]);
+    const index = (db.bookings || []).findIndex((b) => Number(b.id) === id);
+    if (index >= 0) {
+      const [deleted] = db.bookings.splice(index, 1);
+      writeLocalDb(db);
+      return { rows: [deleted], rowCount: 1 };
+    }
+    return { rows: [], rowCount: 0 };
+  }
+
+  if (normalized.startsWith("insert into reviews")) {
+    const record = {
+      id: (db.reviews || []).length + 1,
+      booking_id: Number(params[0]),
+      user_id: params[1],
+      trip_id: params[2] || null,
+      booking_ref: params[3],
+      customer_name: params[4],
+      destination: params[5],
+      rating: Number(params[6]),
+      review_text: params[7],
+      review_date: params[8] || new Date().toISOString(),
+      status: params[9] || "published"
+    };
+    db.reviews = db.reviews || [];
+    db.reviews.push(record);
+    writeLocalDb(db);
+    return { rows: [record], rowCount: 1 };
+  }
+
+  if (normalized.startsWith("select * from reviews where booking_id")) {
+    const bookingId = Number(params[0]);
+    const rows = (db.reviews || []).filter((review) => Number(review.booking_id) === bookingId);
+    return { rows, rowCount: rows.length };
+  }
+
+  if (normalized.startsWith("select * from reviews order by")) {
+    const rows = [...(db.reviews || [])].sort((a, b) => new Date(b.review_date) - new Date(a.review_date));
+    return { rows, rowCount: rows.length };
+  }
+
+  if (normalized.startsWith("select * from reviews where destination")) {
+    const destination = String(params[0] || "").toLowerCase();
+    const rows = (db.reviews || []).filter((review) => String(review.destination || "").toLowerCase() === destination).sort((a, b) => new Date(b.review_date) - new Date(a.review_date));
+    return { rows, rowCount: rows.length };
+  }
+
+  if (normalized.startsWith("select * from reviews where user_id")) {
+    const userId = params[0];
+    const rows = (db.reviews || []).filter((review) => review.user_id === userId).sort((a, b) => new Date(b.review_date) - new Date(a.review_date));
     return { rows, rowCount: rows.length };
   }
 

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekend AI Admin</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --primary: #2563eb;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --card-radius: 18px;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 { margin: 0; font-size: 22px; }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .button { border: none; border-radius: 999px; padding: 11px 18px; cursor: pointer; font-weight: 600; }
+    .button.primary { background: var(--primary); color: white; }
+    .button.secondary { background: #f1f5f9; color: var(--text); }
+    .button.danger { background: var(--danger); color: white; }
+    .page-container { max-width: 1200px; margin: 24px auto 60px; padding: 0 20px; }
+    .panel { background: white; border: 1px solid var(--border); border-radius: var(--card-radius); box-shadow: var(--shadow); padding: 24px; }
+    .panel + .panel { margin-top: 20px; }
+    .panel h2 { margin: 0 0 10px; font-size: 20px; }
+    .panel p { margin: 0 0 18px; color: var(--muted); }
+    .controls { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: flex-end; margin-bottom: 20px; }
+    .controls input, .controls select { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: #fff; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 880px; }
+    th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    th { background: #f8fafc; color: var(--muted); font-weight: 700; }
+    tr:hover { background: #f8fbff; }
+    .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 88px; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+    .badge.confirmed { background: #eef2ff; color: #3730a3; }
+    .badge.completed { background: #ecfdf5; color: #166534; }
+    .badge.cancelled { background: #fee2e2; color: #991b1b; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .message { padding: 14px 16px; border-radius: 14px; margin-bottom: 18px; font-size: 14px; }
+    .message.success { background: #ecfdf5; color: #166534; border: 1px solid #d1fae5; }
+    .message.error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .empty-state { text-align: center; color: var(--muted); padding: 32px 0; }
+    @media (max-width: 860px) {
+      .controls { grid-template-columns: 1fr; }
+      header { flex-wrap: wrap; align-items: flex-start; }
+      .page-container { margin-top: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Weekend AI Admin</h1>
+      <p style="margin:4px 0 0;color:var(--muted);">Manage bookings, update statuses, and remove test records.</p>
+    </div>
+    <div class="header-actions">
+      <button class="button secondary" id="refresh-btn">Refresh</button>
+      <button class="button danger" id="logout-btn">Sign Out</button>
+    </div>
+  </header>
+  <div class="page-container">
+    <div class="panel">
+      <div class="controls">
+        <input type="text" id="search-input" placeholder="Search by booking ref, customer, or destination" />
+        <select id="status-filter">
+          <option value="">All statuses</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <button class="button primary" id="search-btn">Search</button>
+      </div>
+      <div id="message-box"></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Booking Ref</th>
+              <th>Customer</th>
+              <th>Destination</th>
+              <th>Travel Date</th>
+              <th>Travelers</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="bookings-table-body"></tbody>
+        </table>
+      </div>
+      <div id="empty-state" class="empty-state" style="display:none;">No bookings match your filters.</div>
+    </div>
+  </div>
+  <script>
+    function getStoredUser() {
+      try { return JSON.parse(localStorage.getItem('weekendai_user') || 'null'); }
+      catch (e) { return null; }
+    }
+    function isAdmin() {
+      const user = getStoredUser();
+      return user && user.role === 'admin';
+    }
+    function redirectToLogin() {
+      localStorage.removeItem('loggedIn');
+      window.location.href = 'login.html';
+    }
+    function showMessage(text, type = 'success') {
+      const box = document.getElementById('message-box');
+      box.innerHTML = `<div class="message ${type}">${text}</div>`;
+      setTimeout(() => { box.innerHTML = ''; }, 5000);
+    }
+    async function fetchBookings() {
+      const admin = getStoredUser();
+      if (!admin) return [];
+      const url = `/api/admin/bookings?user_id=${encodeURIComponent(admin.user_id)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Unable to load bookings.');
+      const data = await res.json();
+      return Array.isArray(data.bookings) ? data.bookings : [];
+    }
+    function renderBookings(bookings) {
+      const body = document.getElementById('bookings-table-body');
+      const empty = document.getElementById('empty-state');
+      const filter = document.getElementById('status-filter').value;
+      const search = document.getElementById('search-input').value.trim().toLowerCase();
+      const filtered = bookings.filter((booking) => {
+        const matchesStatus = !filter || String(booking.status || 'confirmed').toLowerCase() === filter;
+        const matchesSearch = !search || [booking.booking_ref, booking.full_name, booking.destination, booking.email].some((field) => String(field || '').toLowerCase().includes(search));
+        return matchesStatus && matchesSearch;
+      });
+      if (!filtered.length) {
+        body.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+      body.innerHTML = filtered.map((booking) => {
+        const status = String(booking.status || 'confirmed').toLowerCase();
+        const badgeClass = status === 'completed' ? 'completed' : status === 'cancelled' ? 'cancelled' : 'confirmed';
+        const travelDate = booking.travel_date ? new Date(booking.travel_date).toLocaleDateString() : 'N/A';
+        return `
+          <tr>
+            <td>${escapeHtml(booking.booking_ref)}</td>
+            <td>${escapeHtml(booking.full_name || booking.email || 'Guest')}</td>
+            <td>${escapeHtml(booking.destination || 'N/A')}</td>
+            <td>${escapeHtml(travelDate)}</td>
+            <td>${escapeHtml(String(booking.travelers || 1))}</td>
+            <td><span class="badge ${badgeClass}">${escapeHtml(status)}</span></td>
+            <td class="actions">
+              <button class="button secondary" onclick="updateStatus(${Number(booking.id)}, 'confirmed')">Confirm</button>
+              <button class="button secondary" onclick="updateStatus(${Number(booking.id)}, 'completed')">Complete</button>
+              <button class="button secondary" onclick="updateStatus(${Number(booking.id)}, 'cancelled')">Cancel</button>
+              <button class="button danger" onclick="deleteBooking(${Number(booking.id)})">Delete</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+    function escapeHtml(value) {
+      return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    async function refreshBookings() {
+      try {
+        const bookings = await fetchBookings();
+        renderBookings(bookings);
+      } catch (err) {
+        showMessage(err.message || 'Failed to load bookings.', 'error');
+      }
+    }
+    async function updateStatus(bookingId, status) {
+      const admin = getStoredUser();
+      if (!admin) return redirectToLogin();
+      try {
+        const res = await fetch('/api/admin/bookings/status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ admin_user_id: admin.user_id, booking_id: bookingId, status })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Unable to update status.');
+        showMessage(`Booking ${bookingId} updated to ${status}.`, 'success');
+        refreshBookings();
+      } catch (err) {
+        showMessage(err.message || 'Unable to update booking status.', 'error');
+      }
+    }
+    async function deleteBooking(bookingId) {
+      const admin = getStoredUser();
+      if (!admin) return redirectToLogin();
+      if (!confirm('Delete this booking permanently?')) return;
+      try {
+        const res = await fetch(`/api/admin/bookings?id=${encodeURIComponent(bookingId)}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ admin_user_id: admin.user_id })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Unable to delete booking.');
+        showMessage(`Booking ${bookingId} deleted.`, 'success');
+        refreshBookings();
+      } catch (err) {
+        showMessage(err.message || 'Unable to delete booking.', 'error');
+      }
+    }
+    document.getElementById('logout-btn').addEventListener('click', function () {
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('weekendai_user');
+      window.location.href = 'login.html';
+    });
+    document.getElementById('refresh-btn').addEventListener('click', refreshBookings);
+    document.getElementById('search-btn').addEventListener('click', refreshBookings);
+    document.getElementById('status-filter').addEventListener('change', refreshBookings);
+    window.addEventListener('DOMContentLoaded', function () {
+      if (!isAdmin()) {
+        return redirectToLogin();
+      }
+      refreshBookings();
+    });
+  </script>
+</body>
+</html>

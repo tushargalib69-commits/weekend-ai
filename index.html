@@ -835,7 +835,7 @@ Plan With AI
 <div class="destinations">
 
 
-<div class="destination-card" onclick="selectDestination('Cox Bazar')">
+<div class="destination-card" data-destination="Cox's Bazar" id="card-coxsbazar" onclick="selectDestination('Cox Bazar')">
 
 
 <div class="destination-img">
@@ -860,6 +860,8 @@ From ৳2500
 
 </div>
 
+<div class="booking-count" id="count-coxsbazar">Loading travelers...</div>
+
 </div>
 
 
@@ -869,7 +871,7 @@ From ৳2500
 
 
 
-<div class="destination-card" onclick="selectDestination('Sylhet')">
+<div class="destination-card" data-destination="Sylhet" id="card-sylhet" onclick="selectDestination('Sylhet')">
 
 
 <div class="destination-img">
@@ -894,6 +896,8 @@ From ৳1800
 
 </div>
 
+<div class="booking-count" id="count-sylhet">Loading travelers...</div>
+
 </div>
 
 
@@ -903,7 +907,7 @@ From ৳1800
 
 
 
-<div class="destination-card" onclick="selectDestination('Bandarban')">
+<div class="destination-card" data-destination="Bandarban" id="card-bandarban" onclick="selectDestination('Bandarban')">
 
 
 <div class="destination-img">
@@ -928,6 +932,8 @@ From ৳2100
 
 </div>
 
+<div class="booking-count" id="count-bandarban">Loading travelers...</div>
+
 </div>
 
 
@@ -937,7 +943,7 @@ From ৳2100
 
 
 
-<div class="destination-card" onclick="selectDestination('Sundarbans')">
+<div class="destination-card" data-destination="Sundarbans" id="card-sundarbans" onclick="selectDestination('Sundarbans')">
 
 
 <div class="destination-img">
@@ -962,6 +968,8 @@ From ৳3200
 
 </div>
 
+<div class="booking-count" id="count-sundarbans">Loading travelers...</div>
+
 </div>
 
 
@@ -976,69 +984,16 @@ From ৳3200
 
 
 <div class="review-card">
-
-
-<div class="section-title">
-
-⭐ Traveler Reviews
-
+  <div class="section-title review-section-header">
+    <span>⭐ Traveler Reviews</span>
+    <button class="view-all-btn" id="view-all-reviews-btn" onclick="toggleReviewMode()" style="display:none;">View All Reviews</button>
+  </div>
+  <div class="review-section-subtitle">Latest verified feedback from confirmed and completed bookings.</div>
+  <div id="reviews-container" class="reviews-grid"></div>
+  <div id="reviews-empty" class="empty-state" style="display:none;margin-top:18px;">
+    No reviews yet. Leave a review after your confirmed booking to see it here.
+  </div>
 </div>
-
-
-
-<div class="review">
-
-<b>Rafiq Ahmed</b>
-
-<div class="stars">
-
-★★★★★
-
-</div>
-
-
-<p>
-
-Weekend AI planned my Cox's Bazar trip perfectly.
-
-</p>
-
-
-</div>
-
-
-
-
-<div class="review">
-
-
-<b>Nusrat Jahan</b>
-
-<div class="stars">
-
-★★★★★
-
-</div>
-
-
-<p>
-
-Budget planning was accurate and useful.
-
-</p>
-
-
-</div>
-
-
-
-
-</div>
-
-
-
-</div>
-
 <!-- AI PLANNER PAGE -->
 
 <div class="page" id="plan">
@@ -1496,6 +1451,11 @@ onclick="sendMessage()">
 <!-- PROFILE MODAL -->
 <div class="modal-overlay" id="profile-modal-overlay">
 <div class="modal-card wide" id="profile-modal-card"></div>
+</div>
+
+<!-- REVIEW MODAL -->
+<div class="modal-overlay" id="review-modal-overlay">
+<div class="modal-card" id="review-modal-card"></div>
 </div>
 
 <footer>
@@ -2043,15 +2003,23 @@ async function loadActivity(user){
       body.innerHTML = `<div class="empty-state"><i class="ti ti-ticket" style="font-size:28px;display:block;margin-bottom:8px;"></i>No bookings yet. Plan a trip in the AI Planner and book it to see it here!</div>`;
       return;
     }
-    body.innerHTML = bookings.map((b) => `
+    const reviewResponse = await fetch(`/api/reviews?user_id=${encodeURIComponent(user.user_id || "")}`);
+    const reviewData = await reviewResponse.json();
+    const reviewedBookingIds = new Set(Array.isArray(reviewData.reviews) ? reviewData.reviews.map((r) => Number(r.booking_id)) : []);
+    body.innerHTML = bookings.map((b) => {
+      const status = String(b.status || "confirmed").toLowerCase();
+      const canReview = !reviewedBookingIds.has(Number(b.id)) && ["confirmed", "completed"].includes(status);
+      return `
       <div class="activity-item">
         <div class="top-row">
           <span class="title">${escapeHtml(b.origin || "Dhaka")} → ${escapeHtml(b.destination || "")}</span>
           <span class="badge-confirmed">${escapeHtml(b.status || "confirmed")}</span>
         </div>
         <div class="meta">${escapeHtml(b.booking_ref)} · ${escapeHtml(String(b.travelers || 1))} traveler(s) · ${escapeHtml(String(b.days || 1))} days · ${formatMoney(b.budget || 0)}</div>
+        ${canReview ? `<button class="cta-btn" style="margin-top:12px;width:100%;" onclick="openReviewModal(${Number(b.id)}, '${escapeHtml(b.booking_ref)}', '${escapeHtml(b.destination)}')">Write a review</button>` : ``}
       </div>
-    `).join("");
+    `;
+    }).join("");
   } catch (err) {
     body.innerHTML = `<div class="empty-state">Unable to load your activity right now. Please try again later.</div>`;
   }
@@ -2119,6 +2087,11 @@ function renderBookingDetailsStep(){
     <div class="modal-title">Confirm your booking</div>
     <div class="modal-subtitle">Double check the details below before we lock in your trip.</div>
     ${tripSummaryHtml(currentTripPlan)}
+    <div class="booking-count" id="booking-modal-count">Checking current booking interest…</div>
+    <div class="modal-form-group">
+      <label>Travel Date</label>
+      <input id="booking-travel-date" type="date" />
+    </div>
     <div class="modal-form-group">
       <label>Traveler Name</label>
       <input id="booking-name" value="${escapeHtml(user.full_name || "")}" placeholder="Full name" />
@@ -2130,6 +2103,8 @@ function renderBookingDetailsStep(){
     <div id="booking-error" style="color:#dc2626;font-size:13px;margin-bottom:10px;display:none;"></div>
     <button class="cta-btn" style="width:100%;" onclick="confirmBooking()"><i class="ti ti-circle-check"></i> Confirm Booking</button>
   `;
+  const destination = currentTripPlan?.overview?.destination || currentTripPlan?.destination || "";
+  updateBookingModalCount(destination);
 }
 
 async function confirmBooking(){
@@ -2196,6 +2171,7 @@ function renderBookingSuccessStep(booking){
       <div class="row"><span>Duration</span><b>${escapeHtml(String(booking.days))} days</b></div>
       <div class="row"><span>Estimated Total</span><b>${formatMoney(booking.budget)}</b></div>
     </div>
+    <button class="cta-btn" style="width:100%;margin-bottom:12px;" onclick="openReviewModal(${booking.id}, '${escapeHtml(booking.bookingRef)}', '${escapeHtml(booking.destination)}')"><i class="ti ti-star"></i> Leave a Review</button>
     <button class="cta-btn" style="width:100%;" onclick="closeBookingModal()">Done</button>
   `;
 }
@@ -2205,8 +2181,204 @@ function renderBookingSuccessStep(booking){
 // INIT
 // ===============================
 
+let showAllReviews = false;
+let activeReviewBooking = null;
+
+async function fetchBookingCount(destination) {
+  try {
+    const res = await fetch(`/api/bookings/count?destination=${encodeURIComponent(destination)}`);
+    const data = await res.json();
+    return Number(data.count || 0);
+  } catch {
+    return null;
+  }
+}
+
+async function loadBookingCounts() {
+  document.querySelectorAll(".destination-card").forEach(async (card) => {
+    const destination = card.dataset.destination;
+    const countEl = card.querySelector(".booking-count");
+    if (!destination || !countEl) return;
+    const count = await fetchBookingCount(destination);
+    if (count === null) {
+      countEl.textContent = "Unable to load traveler count.";
+    } else if (count === 0) {
+      countEl.textContent = "Be the first traveler to book this trip.";
+    } else {
+      countEl.textContent = `${count} travelers have booked this trip`;
+    }
+  });
+}
+
+function renderReviewCardMini(review) {
+  const dateLabel = new Date(review.review_date).toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
+  return `
+    <div class="review-card-mini">
+      <div class="review-stars">${'★'.repeat(review.rating || 5)}${'☆'.repeat(5 - (review.rating || 5))}</div>
+      <h4>${escapeHtml(review.customer_name || 'Traveler')}</h4>
+      <div class="review-meta">${escapeHtml(review.destination || 'Unknown trip')}</div>
+      <p>${escapeHtml(review.review_text || '')}</p>
+      <div class="review-date">${escapeHtml(dateLabel)}</div>
+    </div>
+  `;
+}
+
+async function loadHomeReviews() {
+  const reviewsContainer = document.getElementById("reviews-container");
+  const emptyMessage = document.getElementById("reviews-empty");
+  const viewAllBtn = document.getElementById("view-all-reviews-btn");
+  try {
+    const res = await fetch("/api/reviews");
+    const data = await res.json();
+    const reviews = Array.isArray(data.reviews) ? data.reviews : [];
+
+    if (!reviews.length) {
+      reviewsContainer.innerHTML = "";
+      emptyMessage.style.display = "block";
+      viewAllBtn.style.display = "none";
+      return;
+    }
+
+    emptyMessage.style.display = "none";
+    const displayReviews = showAllReviews ? reviews : reviews.slice(0, 3);
+    reviewsContainer.innerHTML = displayReviews.map(renderReviewCardMini).join("");
+    viewAllBtn.style.display = reviews.length > 3 ? "inline-flex" : "none";
+    viewAllBtn.textContent = showAllReviews ? "Show Top Reviews" : "View All Reviews";
+  } catch (err) {
+    reviewsContainer.innerHTML = "";
+    emptyMessage.style.display = "block";
+    emptyMessage.textContent = "Unable to load reviews right now.";
+    viewAllBtn.style.display = "none";
+  }
+}
+
+function toggleReviewMode() {
+  showAllReviews = !showAllReviews;
+  loadHomeReviews();
+}
+
+function openReviewModal(bookingId, bookingRef, destination) {
+  const user = getStoredUser();
+  if (!user) {
+    window.location.href = 'login.html';
+    return;
+  }
+  activeReviewBooking = { bookingId, bookingRef, destination };
+  const card = document.getElementById("review-modal-card");
+  card.innerHTML = `
+    <button class="modal-close" onclick="closeReviewModal()"><i class="ti ti-x"></i></button>
+    <div class="modal-icon"><i class="ti ti-star"></i></div>
+    <div class="modal-title">Share your experience</div>
+    <div class="modal-subtitle">Your review helps other travelers choose the best trip.</div>
+    <div class="modal-form-group">
+      <label>Booking Reference</label>
+      <input type="text" value="${escapeHtml(bookingRef)}" disabled />
+    </div>
+    <div class="modal-form-group">
+      <label>Destination</label>
+      <input type="text" value="${escapeHtml(destination)}" disabled />
+    </div>
+    <div class="modal-form-group">
+      <label>Your Name</label>
+      <input id="review-customer-name" value="${escapeHtml(user.full_name || user.email || '')}" placeholder="Your name" />
+    </div>
+    <div class="modal-form-group">
+      <label>Rating</label>
+      <select id="review-rating">
+        <option value="5">★★★★★ 5 stars</option>
+        <option value="4">★★★★☆ 4 stars</option>
+        <option value="3">★★★☆☆ 3 stars</option>
+        <option value="2">★★☆☆☆ 2 stars</option>
+        <option value="1">★☆☆☆☆ 1 star</option>
+      </select>
+    </div>
+    <div class="modal-form-group">
+      <label>Review</label>
+      <textarea id="review-text" rows="5" placeholder="Tell other travelers what you liked and what could be better."></textarea>
+    </div>
+    <div id="review-error" style="color:#dc2626;font-size:13px;margin-bottom:10px;display:none;"></div>
+    <button class="cta-btn" style="width:100%;" onclick="submitReview()"><i class="ti ti-send"></i> Submit Review</button>
+  `;
+  document.getElementById("review-modal-overlay").classList.add("open");
+}
+
+function closeReviewModal() {
+  document.getElementById("review-modal-overlay").classList.remove("open");
+}
+
+async function submitReview() {
+  const user = getStoredUser();
+  if (!user || !activeReviewBooking) {
+    closeReviewModal();
+    return;
+  }
+  const name = document.getElementById("review-customer-name").value.trim();
+  const rating = Number(document.getElementById("review-rating").value || 0);
+  const text = document.getElementById("review-text").value.trim();
+  const errorBox = document.getElementById("review-error");
+  const button = document.querySelector("#review-modal-card .cta-btn");
+
+  if (!name || !rating || !text) {
+    errorBox.style.display = "block";
+    errorBox.textContent = "Please fill in your name, rating, and review text.";
+    return;
+  }
+  errorBox.style.display = "none";
+  button.disabled = true;
+  button.textContent = "Submitting…";
+
+  try {
+    const res = await fetch("/api/reviews", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        booking_id: activeReviewBooking.bookingId,
+        user_id: user.user_id,
+        booking_ref: activeReviewBooking.bookingRef,
+        customer_name: name,
+        destination: activeReviewBooking.destination,
+        rating,
+        review_text: text,
+        review_date: new Date().toISOString()
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      closeReviewModal();
+      loadHomeReviews();
+      if (isLoggedIn()) {
+        loadActivity(user);
+      }
+      return;
+    }
+    errorBox.style.display = "block";
+    errorBox.textContent = data.message || "Unable to submit your review.";
+  } catch (err) {
+    errorBox.style.display = "block";
+    errorBox.textContent = "Unable to connect to the server.";
+  }
+  button.disabled = false;
+  button.textContent = "Submit Review";
+}
+
+async function updateBookingModalCount(destination) {
+  const countEl = document.getElementById("booking-modal-count");
+  if (!countEl || !destination) return;
+  countEl.textContent = "Loading current booking interest…";
+  const count = await fetchBookingCount(destination);
+  if (count === null) {
+    countEl.textContent = "Unable to load current traveler count.";
+  } else if (count === 0) {
+    countEl.textContent = "Be the first traveler to book this trip.";
+  } else {
+    countEl.textContent = `${count} travelers have booked this trip`;
+  }
+}
+
 window.addEventListener("DOMContentLoaded", function () {
   initAuthUI();
+  loadHomeReviews();
+  loadBookingCounts();
   if (isLoggedIn()) {
     const pending = localStorage.getItem("pendingBooking");
     if (pending) {
@@ -2224,7 +2396,6 @@ window.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
-
 
 </body>
 </html>
