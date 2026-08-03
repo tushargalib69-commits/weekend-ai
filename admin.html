@@ -205,7 +205,7 @@
         const res = await fetch('/api/admin/bookings/status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ admin_user_id: admin.user_id, booking_id: bookingId, status })
+          body: JSON.stringify({ user_id: admin.user_id, booking_id: bookingId, status })
         });
         const data = await res.json();
         if (!data.success) throw new Error(data.message || 'Unable to update status.');
@@ -220,11 +220,11 @@
       if (!admin) return redirectToLogin();
       if (!confirm('Delete this booking permanently?')) return;
       try {
-        const res = await fetch(`/api/admin/bookings?id=${encodeURIComponent(bookingId)}`, {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ admin_user_id: admin.user_id })
+        const query = new URLSearchParams({
+          user_id: String(admin.user_id),
+          booking_id: String(bookingId)
         });
+        const res = await fetch(`/api/admin/bookings?${query.toString()}`, { method: 'DELETE' });
         const data = await res.json();
         if (!data.success) throw new Error(data.message || 'Unable to delete booking.');
         showMessage(`Booking ${bookingId} deleted.`, 'success');
