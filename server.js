@@ -623,13 +623,6 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
-      const existingReview = await db.query(`SELECT * FROM reviews WHERE booking_id = $1`, [bookingId]);
-      if (existingReview.rowCount > 0) {
-        res.writeHead(409, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ success: false, message: "A review has already been submitted for this booking." }));
-        return;
-      }
-
       await db.query(
         `INSERT INTO reviews (booking_id, user_id, trip_id, booking_ref, customer_name, destination, rating, review_text, review_date, status)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,

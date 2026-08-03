@@ -2301,12 +2301,9 @@ async function loadActivity(user){
       body.innerHTML = `<div class="empty-state"><i class="ti ti-ticket" style="font-size:28px;display:block;margin-bottom:8px;"></i>No bookings yet. Plan a trip in the AI Planner and book it to see it here!</div>`;
       return;
     }
-    const reviewResponse = await fetch(`/api/reviews?user_id=${encodeURIComponent(user.user_id || "")}`);
-    const reviewData = await reviewResponse.json();
-    const reviewedBookingIds = new Set(Array.isArray(reviewData.reviews) ? reviewData.reviews.map((r) => Number(r.booking_id)) : []);
     body.innerHTML = bookings.map((b) => {
       const status = String(b.status || "confirmed").toLowerCase();
-      const canReview = !reviewedBookingIds.has(Number(b.id)) && ["confirmed", "completed"].includes(status);
+      const canReview = ["confirmed", "completed"].includes(status);
       return `
       <div class="activity-item">
         <div class="top-row">
@@ -2872,6 +2869,7 @@ function handleHash() {
 window.addEventListener("DOMContentLoaded", function () {
   initAuthUI();
   loadHomeReviews();
+  window.setInterval(loadHomeReviews, 30000);
   loadBookingCounts();
   bindPageEventHandlers();
   handleHash();
