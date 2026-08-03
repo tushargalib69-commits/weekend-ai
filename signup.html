@@ -83,12 +83,22 @@
     .message.error { color:var(--danger); }
     .message.success { color:var(--success); }
 
-    @media (max-width: 800px) {
-      nav { height:66px; padding:0 16px; }
+    @media (max-width: 900px) {
+      nav { height:auto; min-height:70px; padding:0 16px; flex-wrap:wrap; gap:10px; }
       .nav-links { display:none; }
+      .auth-buttons { gap:8px; }
       .logo img { height:36px; width:auto; }
+      .page-wrap { padding:28px 16px; }
       .grid { grid-template-columns:1fr; }
       .auth-card { padding:28px; }
+    }
+
+    @media (max-width: 560px) {
+      nav { padding:12px 14px; }
+      .page-wrap { padding:20px 12px; }
+      .auth-card { padding:22px; border-radius:18px; }
+      .title { font-size:22px; }
+      .btn-primary { padding:12px; }
     }
   </style>
 </head>

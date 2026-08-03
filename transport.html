@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekend AI | Transport</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/services.css" />
+</head>
+<body>
+  <nav>
+    <a class="logo" href="index.html"><img src="assets/weekend-ai-logo.png" alt="Weekend AI" /></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="hotels.html">Hotels</a>
+      <a href="transport.html">Transport</a>
+      <a href="restaurants.html">Restaurants</a>
+      <a href="payment.html">Payment</a>
+    </div>
+    <div class="auth-buttons">
+      <a href="login.html" class="auth-btn">Sign In</a>
+      <a href="signup.html" class="auth-btn">Sign Up</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <section class="hero">
+      <h1>Transport Booking</h1>
+      <p>Secure buses, trains, flights, and private transfers across Bangladesh with a simple booking workflow.</p>
+    </section>
+
+    <div class="section-title">Plan your route</div>
+    <div class="search-panel">
+      <div class="input-group">
+        <label for="from-location">From</label>
+        <input id="from-location" placeholder="Dhaka" value="Dhaka" />
+      </div>
+      <div class="input-group">
+        <label for="to-location">To</label>
+        <input id="to-location" placeholder="Cox's Bazar, Sylhet, Bandarban..." />
+      </div>
+      <button class="cta-btn" id="search-button">Find Transport</button>
+    </div>
+
+    <div id="results-container" class="results-grid"></div>
+
+    <div id="booking-panel" class="booking-panel"></div>
+
+    <div class="section-title">Your transport bookings</div>
+    <div id="history-container" class="history-grid"></div>
+  </div>
+
+  <footer>Weekend AI © 2026 | MIS-465 Project | Independent University Bangladesh</footer>
+  <script src="js/transport.js" defer></script>
+</body>
+</html>

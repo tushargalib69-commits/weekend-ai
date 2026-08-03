@@ -63,10 +63,19 @@
     .message.success { background: #ecfdf5; color: #166534; border: 1px solid #d1fae5; }
     .message.error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
     .empty-state { text-align: center; color: var(--muted); padding: 32px 0; }
-    @media (max-width: 860px) {
+    @media (max-width: 900px) {
       .controls { grid-template-columns: 1fr; }
-      header { flex-wrap: wrap; align-items: flex-start; }
-      .page-container { margin-top: 12px; }
+      header { flex-wrap: wrap; align-items: flex-start; padding: 18px 16px; }
+      .page-container { margin-top: 12px; padding: 0 14px; }
+      .panel { padding: 18px; }
+    }
+
+    @media (max-width: 640px) {
+      header h1 { font-size: 20px; }
+      .header-actions { width: 100%; }
+      .button { width: 100%; justify-content: center; }
+      .panel { padding: 16px; }
+      .controls input, .controls select, .button { padding: 11px 12px; }
     }
   </style>
 </head>

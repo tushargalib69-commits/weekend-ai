@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekend AI | Payment</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/services.css" />
+</head>
+<body>
+  <nav>
+    <a class="logo" href="index.html"><img src="assets/weekend-ai-logo.png" alt="Weekend AI" /></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="hotels.html">Hotels</a>
+      <a href="transport.html">Transport</a>
+      <a href="restaurants.html">Restaurants</a>
+      <a href="my-bookings.html">My Bookings</a>
+      <a href="payment.html">Payment</a>
+    </div>
+    <div class="auth-buttons">
+      <a href="login.html" class="auth-btn">Sign In</a>
+      <a href="signup.html" class="auth-btn">Sign Up</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <section class="hero">
+      <h1>Secure Payments</h1>
+      <p>Choose a local Bangladeshi payment method and complete travel transactions securely with step-by-step guidance.</p>
+    </section>
+
+    <div class="section-title">Choose payment method</div>
+    <div class="search-panel">
+      <div class="input-group">
+        <label for="payment-method">Payment method</label>
+        <select id="payment-method">
+          <option value="bkash">bKash</option>
+          <option value="nagad">Nagad</option>
+          <option value="card">Credit / Debit Card</option>
+        </select>
+      </div>
+      <button class="cta-btn" id="start-payment-button" type="button">Continue</button>
+    </div>
+
+    <div id="payment-panel" class="booking-panel"></div>
+
+    <div class="section-title">Recent payment records</div>
+    <div id="history-container" class="history-grid"></div>
+  </div>
+
+  <footer>Weekend AI © 2026 | MIS-465 Project | Independent University Bangladesh</footer>
+  <div id="toast-container" class="toast-container"></div>
+  <script src="js/payment.js" defer></script>
+</body>
+</html>

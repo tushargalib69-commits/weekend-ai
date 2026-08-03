@@ -60,6 +60,8 @@ border-bottom:1px solid var(--border);
 display:flex;
 align-items:center;
 justify-content:space-between;
+flex-wrap:wrap;
+gap:12px;
 
 padding:0 40px;
 
@@ -69,7 +71,47 @@ z-index:1000;
 
 }
 
+.mobile-menu-toggle{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  width:42px;
+  height:42px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:white;
+  color:var(--primary);
+  cursor:pointer;
+}
 
+.mobile-nav-panel{
+  display:none;
+  position:absolute;
+  top:70px;
+  left:0;
+  right:0;
+  width:100%;
+  flex-direction:column;
+  gap:8px;
+  padding:12px 16px 18px;
+  border-top:1px solid var(--border);
+  background:white;
+  box-shadow:0 18px 40px rgba(9,31,78,.08);
+  z-index:1000;
+}
+
+.mobile-nav-panel.open{
+  display:flex;
+}
+
+.mobile-nav-panel .nav-btn,
+.mobile-nav-panel .auth-btn{
+  width:100%;
+  text-align:left;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
 
 .logo{
 
@@ -359,6 +401,8 @@ transition:.3s;
 
 }
 
+a.destination-card{ text-decoration:none; color:inherit; display:block; }
+
 
 
 .destination-card:hover{
@@ -415,6 +459,42 @@ margin-top:5px;
 
 }
 
+.booking-results{
+  margin-top:24px;
+}
+
+.results-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(220px,1fr));
+  gap:18px;
+  margin-top:18px;
+}
+
+.result-card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.result-card h4{
+  margin:0;
+  font-size:18px;
+}
+
+.result-card p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.result-action{
+  margin-top:auto;
+}
+
 
 
 /* REVIEWS */
@@ -461,6 +541,36 @@ color:#e89b20;
 
 }
 
+.reviews-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:18px;
+}
+
+.reviews-table th,
+.reviews-table td{
+  border:1px solid var(--border);
+  padding:14px 12px;
+  vertical-align:top;
+}
+
+.reviews-table th{
+  background:#f8fafc;
+  color:var(--primary);
+  font-weight:700;
+  text-align:left;
+}
+
+.reviews-table tbody tr:hover{
+  background:#f4f8ff;
+}
+
+.review-meta,
+.review-date{
+  color:var(--muted);
+  font-size:14px;
+}
+
 
 footer{
 
@@ -474,28 +584,112 @@ color:#777;
 
 
 
-@media(max-width:800px){
+@media (max-width: 900px) {
+  nav {
+    padding: 0 16px;
+    min-height: 70px;
+  }
 
-.destinations{
+  .nav-links,
+  .auth-buttons {
+    display:none;
+  }
 
-grid-template-columns:repeat(2,1fr);
+  .mobile-menu-toggle {
+    display:inline-flex;
+  }
 
+  .hero {
+    padding: 32px 24px;
+  }
+
+  .hero h1 {
+    font-size: 30px;
+  }
+
+  .search-box {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box input,
+  .search-box button {
+    width: 100%;
+  }
+
+  .mobile-nav-panel {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  .destinations {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .modal-card {
+    padding: 24px;
+  }
 }
 
+@media (max-width: 640px) {
+  .page {
+    padding: 24px 16px;
+  }
 
-.nav-links{
+  .hero {
+    padding: 24px 18px;
+    margin-bottom: 24px;
+  }
 
-display:none;
+  .hero h1 {
+    font-size: 24px;
+  }
 
-}
+  .section-title {
+    font-size: 18px;
+  }
 
-.hero h1{
+  .destinations {
+    grid-template-columns: 1fr;
+  }
 
-font-size:28px;
+  .review-card {
+    padding: 18px;
+  }
 
-}
+  .modal-card {
+    padding: 20px;
+  }
 
+  .modal-btn-row {
+    flex-direction: column;
+  }
 
+  .chat-suggestions {
+    flex-direction: column;
+  }
+
+  .chat-chip {
+    width: 100%;
+    text-align: center;
+  }
+
+  .activity-item .top-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-chip {
+    max-width: 100%;
+    padding: 6px 10px;
+  }
+
+  .profile-chip-name {
+    max-width: 90px;
+  }
 }
 
 
@@ -696,7 +890,7 @@ padding:7px 14px;border-radius:999px;font-size:12.5px;font-weight:600;cursor:poi
 <div class="nav-links">
 
 
-<button class="nav-btn active" id="home-btn" onclick="showPage('home')">
+<button class="nav-btn active" id="home-btn" data-target="home" onclick="showPage('home')">
 
 <i class="ti ti-home"></i>
 Home
@@ -705,7 +899,7 @@ Home
 
 
 
-<button class="nav-btn" id="plan-btn" onclick="showPage('plan')">
+<button class="nav-btn" id="plan-btn" data-target="plan" onclick="showPage('plan')">
 
 <i class="ti ti-sparkles"></i>
 AI Planner
@@ -714,7 +908,7 @@ AI Planner
 
 
 
-<button class="nav-btn" id="book-btn" onclick="showPage('book')">
+<button class="nav-btn" id="book-btn" data-target="book" onclick="showPage('book')">
 
 <i class="ti ti-ticket"></i>
 Booking
@@ -723,7 +917,7 @@ Booking
 
 
 
-<button class="nav-btn" id="chat-btn" onclick="showPage('chat')">
+<button class="nav-btn" id="chat-btn" data-target="chat" onclick="showPage('chat')">
 
 <i class="ti ti-message"></i>
 AI Chat
@@ -769,6 +963,27 @@ Sign Up
 
 </nav>
 
+<button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Open navigation menu" aria-expanded="false" onclick="toggleMobileMenu()">
+  <i class="ti ti-menu-2"></i>
+</button>
+
+<div class="mobile-nav-panel" id="mobile-nav-panel">
+  <button class="nav-btn active" id="mobile-home-btn" data-target="home" onclick="showPage('home'); closeMobileMenu();">
+    <i class="ti ti-home"></i> Home
+  </button>
+  <button class="nav-btn" id="mobile-plan-btn" data-target="plan" onclick="showPage('plan'); closeMobileMenu();">
+    <i class="ti ti-sparkles"></i> AI Planner
+  </button>
+  <button class="nav-btn" id="mobile-book-btn" data-target="book" onclick="showPage('book'); closeMobileMenu();">
+    <i class="ti ti-ticket"></i> Booking
+  </button>
+  <button class="nav-btn" id="mobile-chat-btn" data-target="chat" onclick="showPage('chat'); closeMobileMenu();">
+    <i class="ti ti-message"></i> AI Chat
+  </button>
+  <a href="login.html" class="auth-btn login-btn" onclick="closeMobileMenu();">Sign In</a>
+  <a href="signup.html" class="auth-btn signup-btn" onclick="closeMobileMenu();">Sign Up</a>
+</div>
+
 
 
 
@@ -807,7 +1022,7 @@ placeholder="Where do you want to go? Cox's Bazar, Sylhet..."
 >
 
 
-<button onclick="goPlanner()">
+<button id="home-search-button" type="button" onclick="goPlanner()">
 
 Plan With AI
 
@@ -994,6 +1209,7 @@ From ৳3200
     No reviews yet. Leave a review after your confirmed booking to see it here.
   </div>
 </div>
+</div>
 <!-- AI PLANNER PAGE -->
 
 <div class="page" id="plan">
@@ -1167,7 +1383,7 @@ onclick="openBookingModal()">
 <div class="destinations">
 
 
-<div class="destination-card">
+<a href="hotels.html" class="destination-card">
 
 
 <div class="destination-img">
@@ -1194,23 +1410,19 @@ Find hotels and resorts
 </p>
 
 
-<button class="signup-btn">
-
-Search Hotels
-
-</button>
+<div class="signup-btn">Search Hotels</div>
 
 
 </div>
 
 
-</div>
+</a>
 
 
 
 
 
-<div class="destination-card">
+<a href="transport.html" class="destination-card">
 
 
 <div class="destination-img">
@@ -1237,23 +1449,19 @@ Bus, train and flights
 </p>
 
 
-<button class="signup-btn">
-
-Find Transport
-
-</button>
+<div class="signup-btn">Find Transport</div>
 
 
 </div>
 
 
-</div>
+</a>
 
 
 
 
 
-<div class="destination-card">
+<a href="restaurants.html" class="destination-card">
 
 
 <div class="destination-img">
@@ -1280,23 +1488,19 @@ Local food suggestions
 </p>
 
 
-<button class="signup-btn">
-
-Explore Food
-
-</button>
+<div class="signup-btn">Explore Food</div>
 
 
 </div>
 
 
-</div>
+</a>
 
 
 
 
 
-<div class="destination-card">
+<a href="payment.html" class="destination-card">
 
 
 <div class="destination-img">
@@ -1323,24 +1527,20 @@ bKash, Nagad, Cards
 </p>
 
 
-<button class="signup-btn">
-
-Pay Securely
-
-</button>
+<div class="signup-btn">Pay Securely</div>
 
 
 </div>
 
 
-</div>
+</a>
 
 
 
 </div>
 
 
-
+<div id="booking-results" class="booking-results"></div>
 
 
 </div>
@@ -1472,38 +1672,56 @@ Weekend AI © 2026 | MIS-465 Project | Independent University Bangladesh
 // ===============================
 
 
+function closeMobileMenu() {
+  const panel = document.getElementById("mobile-nav-panel");
+  const button = document.getElementById("mobile-menu-toggle");
+  panel?.classList.remove("open");
+  button?.setAttribute("aria-expanded", "false");
+}
+
+function toggleMobileMenu() {
+  const panel = document.getElementById("mobile-nav-panel");
+  const button = document.getElementById("mobile-menu-toggle");
+  if (!panel) return;
+  const isOpen = panel.classList.toggle("open");
+  button?.setAttribute("aria-expanded", String(isOpen));
+}
+
 function showPage(page){
+  const target = document.getElementById(page);
+  if (!target) {
+    console.warn(`showPage: no page found for ${page}`);
+    return;
+  }
 
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  target.classList.add("active");
 
-document.querySelectorAll(".page")
-.forEach(p=>{
-p.classList.remove("active");
-});
+  document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+  const desktopBtn = document.getElementById(`${page}-btn`);
+  const mobileBtn = document.getElementById(`mobile-${page}-btn`);
+  if (desktopBtn) desktopBtn.classList.add("active");
+  if (mobileBtn) mobileBtn.classList.add("active");
 
-
-document.getElementById(page)
-.classList.add("active");
-
-
-
-document.querySelectorAll(".nav-btn")
-.forEach(btn=>{
-btn.classList.remove("active");
-});
-
-
-
-let activeBtn=document.getElementById(page+"-btn");
-
-if(activeBtn){
-activeBtn.classList.add("active");
+  closeMobileMenu();
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-
-window.scrollTo(0,0);
-
-
-}
+window.showPage = showPage;
+window.generateTrip = generateTrip;
+window.sendMessage = sendMessage;
+window.openProfileModal = openProfileModal;
+window.toggleProfileDropdown = toggleProfileDropdown;
+window.openBookingModal = openBookingModal;
+window.showHotels = showHotels;
+window.showTransport = showTransport;
+window.showRestaurants = showRestaurants;
+window.showPayments = showPayments;
+window.handleResultAction = handleResultAction;
+window.showHotels = showHotels;
+window.showTransport = showTransport;
+window.showRestaurants = showRestaurants;
+window.showPayments = showPayments;
 
 
 
@@ -2157,6 +2375,147 @@ async function confirmBooking(){
   }
 }
 
+function showBookingResults(title, items) {
+  const results = document.getElementById("booking-results");
+  if (!results) return;
+  if (!items || !items.length) {
+    results.innerHTML = `<div class="empty-state">No ${escapeHtml(title.toLowerCase())} found yet.</div>`;
+    return;
+  }
+  results.innerHTML = `
+    <div class="section-title">${escapeHtml(title)}</div>
+    <div class="results-grid">
+      ${items.map(item => `
+        <div class="result-card">
+          <h4>${escapeHtml(item.name)}</h4>
+          <p>${escapeHtml(item.detail)}</p>
+          <div><strong>${escapeHtml(item.price)}</strong></div>
+          ${item.link ? `<a class="signup-btn result-action" href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.actionText)}</a>` : `<button class="signup-btn result-action" onclick="alert('${escapeHtml(item.actionText)}')">${escapeHtml(item.actionText)}</button>`}
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function getBookingDestination() {
+  return currentTripPlan?.overview?.destination || 'your next destination';
+}
+
+function showHotels() {
+  showPage('book');
+  const dest = getBookingDestination().toLowerCase();
+  let hotels = [
+    { name: 'Hotel Sea Pearl, Cox\'s Bazar', detail: 'Beachfront hotel with sea-view rooms, breakfast, and pool access.', price: '৳5,200/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Hotel+Sea+Pearl+Cox%27s+Bazar' },
+    { name: 'Hotel The Peninsula, Cox\'s Bazar', detail: 'Popular ocean-facing hotel near Laboni Beach and local markets.', price: '৳4,600/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Hotel+The+Peninsula+Cox%27s+Bazar' },
+    { name: 'Long Beach Hotel, Cox\'s Bazar', detail: 'Comfortable stay with rooftop dining and easy beach access.', price: '৳3,800/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Long+Beach+Hotel+Cox%27s+Bazar' }
+  ];
+
+  if (dest.includes('sylhet')) {
+    hotels = [
+      { name: 'Hotel Noorjahan Grand, Sylhet', detail: 'Well-known hotel near Sylhet city with modern rooms and breakfast.', price: '৳4,000/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Hotel+Noorjahan+Grand+Sylhet' },
+      { name: 'Meghbon Inn, Sylhet', detail: 'Central location with comfortable rooms and local tea garden views.', price: '৳3,200/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Meghbon+Inn+Sylhet' },
+      { name: 'Sylhet Garden Hotel', detail: 'Business hotel with free Wi-Fi and easy access to Sylhet city center.', price: '৳3,500/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Sylhet+Garden+Hotel' }
+    ];
+  } else if (dest.includes('bandarban')) {
+    hotels = [
+      { name: 'Hill Garden Resort, Bandarban', detail: 'Resort with hillside cottages, garden views and local trekking support.', price: '৳3,900/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Hill+Garden+Resort+Bandarban' },
+      { name: 'Hilltop Hotel, Bandarban', detail: 'Quiet hilltop rooms with scenic views and easy access to tours.', price: '৳3,300/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Hilltop+Hotel+Bandarban' },
+      { name: 'Royal Tulip Bandarban', detail: 'Premium resort with modern amenities and beautiful hillside setting.', price: '৳5,100/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Royal+Tulip+Bandarban' }
+    ];
+  } else if (dest.includes('sundarban') || dest.includes('sundarbans')) {
+    hotels = [
+      { name: 'Sundarban Eco Resort', detail: 'Stay close to the mangrove forest with guided boat tours included.', price: '৳4,500/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Sundarban+Eco+Resort' },
+      { name: 'Sundarban Treetop Resort', detail: 'Unique treehouse-style cabins near the forest entry point.', price: '৳4,200/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Sundarban+Treetop+Resort' },
+      { name: 'Sundarban Eco Lodge', detail: 'Riverside lodge with boat safari packages and local cuisine.', price: '৳4,000/night', actionText: 'View on Google', link: 'https://www.google.com/search?q=Sundarban+Eco+Lodge' }
+    ];
+  }
+
+  showBookingResults('Hotel Options', hotels);
+}
+
+function showTransport() {
+  showPage('book');
+  const dest = getBookingDestination().toLowerCase();
+  let transport = [
+    { name: 'Green Line Paribahan (Bus)', detail: 'Premium coach service from Dhaka to Cox\'s Bazar with reclining seats.', price: '৳1,200', actionText: 'Select Bus' },
+    { name: 'Shyamoli Paribahan (Bus)', detail: 'Night bus service from Dhaka to Sylhet with AC seats.', price: '৳950', actionText: 'Select Bus' },
+    { name: 'Nabil Paribahan (Bus)', detail: 'Reliable bus service to Bandarban and Chittagong routes.', price: '৳900', actionText: 'Select Bus' }
+  ];
+
+  if (dest.includes('sylhet')) {
+    transport = [
+      { name: 'Parabat Express', detail: 'Dhaka to Sylhet intercity train with comfortable reserved seats.', price: '৳900', actionText: 'Select Train' },
+      { name: 'Upaban Express', detail: 'Popular train or bus options from Dhaka to Sylhet.', price: '৳850', actionText: 'Select Train' },
+      { name: 'Private Car Transfer', detail: 'Door-to-door private car service from Dhaka to Sylhet.', price: '৳4,500', actionText: 'Select Car' }
+    ];
+  } else if (dest.includes('cox')) {
+    transport = [
+      { name: 'Green Line Paribahan', detail: 'Direct premium bus from Dhaka to Cox\'s Bazar.', price: '৳1,250', actionText: 'Select Bus' },
+      { name: 'Biman Bangladesh Airlines', detail: 'Flight from Dhaka to Cox\'s Bazar (daily service).', price: '৳6,500', actionText: 'Select Flight' },
+      { name: 'Private Car Transfer', detail: 'Comfortable private car ride from Dhaka to Cox\'s Bazar.', price: '৳9,000', actionText: 'Select Car' }
+    ];
+  } else if (dest.includes('bandarban')) {
+    transport = [
+      { name: 'BRTC/City Bus to Bandarban', detail: 'Local bus service from Chittagong to Bandarban.', price: '৳300', actionText: 'Select Bus' },
+      { name: 'Private Jeep Safari', detail: 'Jeep transfer and sightseeing tour inside Bandarban.', price: '৳3,800', actionText: 'Select Jeep' },
+      { name: 'Private Car Service', detail: 'Private car from Chittagong to Bandarban.', price: '৳4,200', actionText: 'Select Car' }
+    ];
+  } else if (dest.includes('sundarban') || dest.includes('sundarbans')) {
+    transport = [
+      { name: 'Katcha Launch', detail: 'Boat transfer to Sundarbans entry point from Khulna.', price: '৳850', actionText: 'Select Launch' },
+      { name: 'Private Motor Launch', detail: 'Private boat ride for Sundarbans sightseeing.', price: '৳1,500', actionText: 'Select Boat' },
+      { name: 'Khulna Car Transfer', detail: 'Private car service to Sundarbans embarkation point.', price: '৳3,000', actionText: 'Select Car' }
+    ];
+  }
+
+  showBookingResults('Transport Options', transport);
+}
+
+function showRestaurants() {
+  showPage('book');
+  const dest = getBookingDestination().toLowerCase();
+  let restaurants = [
+    { name: 'Ship Inn Restaurant, Cox\'s Bazar', detail: 'Seafood and Bengali classics right on the beach.', price: '৳550/person', actionText: 'View Menu' },
+    { name: 'Naf River View, Cox\'s Bazar', detail: 'Popular restaurant with river and sea view dining.', price: '৳600/person', actionText: 'View Menu' },
+    { name: 'Sujan Restaurant, Cox\'s Bazar', detail: 'Well-reviewed spot for local and continental dishes.', price: '৳500/person', actionText: 'View Menu' }
+  ];
+
+  if (dest.includes('sylhet')) {
+    restaurants = [
+      { name: 'Madina Restaurant, Sylhet', detail: 'Famous for biryani, kebabs and local Sylheti cuisine.', price: '৳450/person', actionText: 'View Menu' },
+      { name: 'Yum5Lo, Sylhet', detail: 'Modern bistro with local fusion dishes.', price: '৳600/person', actionText: 'View Menu' },
+      { name: 'Tea Junction, Sylhet', detail: 'Great tea garden views and light meals.', price: '৳350/person', actionText: 'View Menu' }
+    ];
+  } else if (dest.includes('bandarban')) {
+    restaurants = [
+      { name: 'Hill View Restaurant, Bandarban', detail: 'Comfortable hilltop dining with local tribal dishes.', price: '৳450/person', actionText: 'View Menu' },
+      { name: 'Sajek Valley Restaurant', detail: 'Local favorites with scenic hill views.', price: '৳500/person', actionText: 'View Menu' },
+      { name: 'Bamboo Restaurant, Bandarban', detail: 'Rustic dining serving fresh local food.', price: '৳400/person', actionText: 'View Menu' }
+    ];
+  } else if (dest.includes('sundarban') || dest.includes('sundarbans')) {
+    restaurants = [
+      { name: 'Sundarban Eco Lodge Dining', detail: 'Local meals served during Sundarbans tours.', price: '৳400/person', actionText: 'View Menu' },
+      { name: 'Khulna Riverside Restaurant', detail: 'Fresh fish dishes near the river entrance.', price: '৳450/person', actionText: 'View Menu' },
+      { name: 'Mangrove Kitchen', detail: 'Local Bengali cuisine for day trips.', price: '৳380/person', actionText: 'View Menu' }
+    ];
+  }
+
+  showBookingResults('Restaurant Suggestions', restaurants);
+}
+
+function showPayments() {
+  showPage('book');
+  showBookingResults('Payment Options', [
+    { name: 'bKash', detail: 'Pay securely using bKash mobile payment.', price: 'Instant', actionText: 'Pay with bKash' },
+    { name: 'Nagad', detail: 'Easy payment through Nagad wallet.', price: 'Instant', actionText: 'Pay with Nagad' },
+    { name: 'Credit/Debit Card', detail: 'Visa, Mastercard and local cards accepted.', price: 'Instant', actionText: 'Pay with Card' }
+  ]);
+}
+
+function handleResultAction(actionText) {
+  alert(`${actionText} selected. We will connect you with the provider shortly.`);
+}
+
 function renderBookingSuccessStep(booking){
   const card = document.getElementById("booking-modal-card");
   card.innerHTML = `
@@ -2213,13 +2572,16 @@ async function loadBookingCounts() {
 function renderReviewCardMini(review) {
   const dateLabel = new Date(review.review_date).toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
   return `
-    <div class="review-card-mini">
-      <div class="review-stars">${'★'.repeat(review.rating || 5)}${'☆'.repeat(5 - (review.rating || 5))}</div>
-      <h4>${escapeHtml(review.customer_name || 'Traveler')}</h4>
-      <div class="review-meta">${escapeHtml(review.destination || 'Unknown trip')}</div>
-      <p>${escapeHtml(review.review_text || '')}</p>
-      <div class="review-date">${escapeHtml(dateLabel)}</div>
-    </div>
+    <tr>
+      <td>${escapeHtml('★'.repeat(review.rating || 5) + '☆'.repeat(5 - (review.rating || 5)))}</td>
+      <td>
+        <strong>${escapeHtml(review.customer_name || 'Traveler')}</strong><br>
+        <span class="review-meta">${escapeHtml(review.destination || 'Unknown trip')}</span>
+      </td>
+      <td>${escapeHtml(review.destination || 'Unknown trip')}</td>
+      <td>${escapeHtml(review.review_text || '')}</td>
+      <td class="review-date">${escapeHtml(dateLabel)}</td>
+    </tr>
   `;
 }
 
@@ -2241,7 +2603,22 @@ async function loadHomeReviews() {
 
     emptyMessage.style.display = "none";
     const displayReviews = showAllReviews ? reviews : reviews.slice(0, 3);
-    reviewsContainer.innerHTML = displayReviews.map(renderReviewCardMini).join("");
+    reviewsContainer.innerHTML = `
+      <table class="reviews-table">
+        <thead>
+          <tr>
+            <th>Rating</th>
+            <th>Name</th>
+            <th>Destination</th>
+            <th>Review</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${displayReviews.map(renderReviewCardMini).join("")}
+        </tbody>
+      </table>
+    `;
     viewAllBtn.style.display = reviews.length > 3 ? "inline-flex" : "none";
     viewAllBtn.textContent = showAllReviews ? "Show Top Reviews" : "View All Reviews";
   } catch (err) {
@@ -2294,7 +2671,7 @@ function openReviewModal(bookingId, bookingRef, destination) {
     </div>
     <div class="modal-form-group">
       <label>Review</label>
-      <textarea id="review-text" rows="5" placeholder="Tell other travelers what you liked and what could be better."></textarea>
+      <textarea id="review-text" rows="5"></textarea>
     </div>
     <div id="review-error" style="color:#dc2626;font-size:13px;margin-bottom:10px;display:none;"></div>
     <button class="cta-btn" style="width:100%;" onclick="submitReview()"><i class="ti ti-send"></i> Submit Review</button>
@@ -2375,10 +2752,52 @@ async function updateBookingModalCount(destination) {
   }
 }
 
+function bindPageEventHandlers() {
+  document.querySelectorAll('[data-target]').forEach((btn) => {
+    const target = btn.getAttribute('data-target');
+    if (!target) return;
+    btn.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.location.hash = `#${target}`;
+      showPage(target);
+    });
+  });
+
+  const planButton = document.getElementById('home-search-button');
+  if (planButton) {
+    planButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      goPlanner();
+    });
+  }
+
+  const chatSendBtn = document.getElementById('chat-send-btn');
+  if (chatSendBtn) {
+    chatSendBtn.addEventListener('click', (event) => {
+      event.preventDefault();
+      sendMessage();
+    });
+  }
+
+  document.querySelectorAll('.profile-dropdown-item').forEach((item) => {
+    item.addEventListener('click', () => document.getElementById('profile-dropdown')?.classList.remove('open'));
+  });
+}
+
+function handleHash() {
+  const hash = window.location.hash.replace('#', '') || 'home';
+  showPage(hash);
+}
+
 window.addEventListener("DOMContentLoaded", function () {
   initAuthUI();
   loadHomeReviews();
   loadBookingCounts();
+  bindPageEventHandlers();
+  handleHash();
+
+  window.addEventListener('hashchange', handleHash);
+
   if (isLoggedIn()) {
     const pending = localStorage.getItem("pendingBooking");
     if (pending) {

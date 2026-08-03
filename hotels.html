@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekend AI | Hotels</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/services.css" />
+</head>
+<body>
+  <nav>
+    <a class="logo" href="index.html"><img src="assets/weekend-ai-logo.png" alt="Weekend AI" /></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="hotels.html">Hotels</a>
+      <a href="transport.html">Transport</a>
+      <a href="restaurants.html">Restaurants</a>
+      <a href="my-bookings.html">My Bookings</a>
+      <a href="payment.html">Payment</a>
+    </div>
+    <div class="auth-buttons" id="auth-buttons">
+      <a href="login.html" class="auth-btn">Sign In</a>
+      <a href="signup.html" class="auth-btn">Sign Up</a>
+    </div>
+    <div class="user-panel" id="user-panel" style="display:none; gap:10px; align-items:center;">
+      <span id="user-name"></span>
+      <button class="auth-btn" id="sign-out-btn" type="button">Sign Out</button>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <section class="hero">
+      <h1>Hotels & Stays</h1>
+      <p>Book trusted hotel rooms across Bangladesh with local rates, instant Google search links, and a simple reservation flow.</p>
+    </section>
+
+    <div class="section-title">Find your destination</div>
+    <div class="search-panel">
+      <div class="input-group">
+        <label for="destination">Destination</label>
+        <input id="destination" placeholder="Cox's Bazar, Sylhet, Bandarban, Khulna..." />
+      </div>
+      <button class="cta-btn" id="search-button">Search Hotels</button>
+    </div>
+
+    <div id="results-container" class="results-grid"></div>
+
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <div class="modal-overlay" id="booking-modal-overlay" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title">
+      <button class="modal-close" id="booking-modal-close" type="button"><i class="ti ti-x"></i></button>
+      <div id="booking-modal-content"></div>
+    </div>
+  </div>
+
+  <footer>Weekend AI © 2026 | MIS-465 Project | Independent University Bangladesh</footer>
+  <script src="js/hotels.js" defer></script>
+</body>
+</html>

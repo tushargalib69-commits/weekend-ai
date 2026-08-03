@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekend AI | My Bookings</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/services.css" />
+</head>
+<body>
+  <nav>
+    <a class="logo" href="index.html"><img src="assets/weekend-ai-logo.png" alt="Weekend AI" /></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="hotels.html">Hotels</a>
+      <a href="transport.html">Transport</a>
+      <a href="restaurants.html">Restaurants</a>
+      <a href="my-bookings.html">My Bookings</a>
+      <a href="payment.html">Payment</a>
+    </div>
+    <div class="auth-buttons">
+      <a href="login.html" class="auth-btn">Sign In</a>
+      <a href="signup.html" class="auth-btn">Sign Up</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <section class="hero">
+      <h1>My Bookings</h1>
+      <p>Review your hotel reservations, see the latest booking details, and continue to payment when ready.</p>
+    </section>
+
+    <div class="section-title">Booking history</div>
+    <div id="bookings-container" class="history-grid"></div>
+  </div>
+
+  <footer>Weekend AI © 2026 | MIS-465 Project | Independent University Bangladesh</footer>
+  <div id="cancel-dialog" class="modal-overlay" aria-hidden="true">
+    <section class="modal-card confirmation-dialog" role="dialog" aria-modal="true" aria-labelledby="cancel-dialog-title">
+      <h2 id="cancel-dialog-title">Cancel this booking?</h2>
+      <p>Its booking record will remain visible, but the rooms will be released and payment will be disabled.</p>
+      <div class="modal-actions"><button id="confirm-cancel-button" class="danger-btn" type="button">Yes, cancel booking</button><button id="dismiss-cancel-button" class="auth-btn" type="button">Keep booking</button></div>
+    </section>
+  </div>
+  <script src="js/my-bookings.js" defer></script>
+</body>
+</html>
