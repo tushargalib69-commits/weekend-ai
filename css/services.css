@@ -220,7 +220,6 @@ nav .logo img {
   color: #0f172a;
 }
 
-.results-grid,
 .service-grid,
 .history-grid {
   display: grid;
@@ -229,7 +228,9 @@ nav .logo img {
 }
 
 .results-grid {
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  display: block;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .hotel-table {
@@ -840,7 +841,6 @@ footer {
   }
 
   .search-panel,
-  .results-grid,
   .service-grid,
   .history-grid {
     grid-template-columns: 1fr;
